@@ -113,9 +113,9 @@
 
 
          
-    <a href="javaScript:void(0);" id="b2t" aria-label="回到顶部" title="回到顶部">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='32' height='32' fill="currentColor" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M13.889,11.611c-0.17,0.17-0.443,0.17-0.612,0l-3.189-3.187l-3.363,3.36c-0.171,0.171-0.441,0.171-0.612,0c-0.172-0.169-0.172-0.443,0-0.611l3.667-3.669c0.17-0.17,0.445-0.172,0.614,0l3.496,3.493C14.058,11.167,14.061,11.443,13.889,11.611 M18.25,10c0,4.558-3.693,8.25-8.25,8.25c-4.557,0-8.25-3.692-8.25-8.25c0-4.557,3.693-8.25,8.25-8.25C14.557,1.75,18.25,5.443,18.25,10 M17.383,10c0-4.07-3.312-7.382-7.383-7.382S2.618,5.93,2.618,10S5.93,17.381,10,17.381S17.383,14.07,17.383,10"></path>
+    <a href="#" class="button" id="b2t" aria-label="回到顶部" title="回到顶部">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
         </svg>
     </a>
 
@@ -127,11 +127,6 @@
                 </svg>
             </a>
             <div class="dropdown-menus" id="dropdown-menus">
-                <a class="dropback-icon button" id="btn-dropback">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round">
-                        <path fill="currentColor" d="M11.469,10l7.08-7.08c0.406-0.406,0.406-1.064,0-1.469c-0.406-0.406-1.063-0.406-1.469,0L10,8.53l-7.081-7.08c-0.406-0.406-1.064-0.406-1.469,0c-0.406,0.406-0.406,1.063,0,1.469L8.531,10L1.45,17.081c-0.406,0.406-0.406,1.064,0,1.469c0.203,0.203,0.469,0.304,0.735,0.304c0.266,0,0.531-0.101,0.735-0.304L10,11.469l7.08,7.081c0.203,0.203,0.469,0.304,0.735,0.304c0.267,0,0.532-0.101,0.735-0.304c0.406-0.406,0.406-1.064,0-1.469L11.469,10z"></path>
-                    </svg>
-                </a>
                 
                     <a href="/" class="dropdown-menu button">
                         首页
@@ -154,24 +149,6 @@
                     </a>
                 
             </div>
-            <script>
-                document.getElementById('btn-dropdown').addEventListener('click', () => {
-                    const dd = document.getElementById('dropdown-menus');
-                    requestAnimationFrame(() => {
-                        dd.style.display = 'flex';
-                        requestAnimationFrame(() => {
-                            dd.style.transform = 'translateY(0)';
-                            dd.style.opacity = '1';
-                        });
-                    });
-                });
-                document.getElementById('btn-dropback').addEventListener('click', () => {
-                    const dd = document.getElementById('dropdown-menus');
-                    dd.style.transform = 'translateY(2.25rem)';                    
-                    dd.style.opacity = '0';
-                    setTimeout(() => {dd.style.display = 'none';}, 350);
-                });
-            </script>
         
     </div>
 </header>
@@ -179,6 +156,7 @@
 
             <main class="main">
     
+
 <div class="post-title">
     <h1 class="post-title__text">
         新的起点 新的体验
@@ -203,17 +181,27 @@
 </div>
 
 
-    <div class="post__with-side">
-        <aside class="post-side">
-            <div class="post-side__toc">
-                
-            </div>
-        </aside>
-        <article class="post content-card">
-            <div class="post__header">
+    <aside class="post-side">
+        <div class="post-side__toc">
+            
+        </div>
+    </aside>
+    <a class="btn-toc button" id="btn-toc">
+        <svg viewBox="0 0 1024 1024" width="32" height="32" xmlns="http://www.w3.org/2000/svg">
+            <path d="M128 256h64V192H128zM320 256h576V192H320zM128 544h64v-64H128zM320 544h576v-64H320zM128 832h64v-64H128zM320 832h576v-64H320z" fill="currentColor"></path>
+        </svg>
+    </a>
+    <div class="toc-menus" id="toc-menus">
+        <div class="toc-title">文章目录</div>
+        
+    </div>
+
+
+<article class="post content-card">
+    <div class="post__header">
     <div class="post__expire" id="post-expired-notify">
         <p>
-            本文最后更新于 <span id="expire-date"></span> 天前，文中部分描述可能已经过时。
+            本文最后更新于 &lt;span id=&#34;expire-date&#34;&gt;&lt;/span&gt; 天前，文中部分描述可能已经过时。
         </p>
     </div>
     <script>
@@ -230,8 +218,8 @@
         })();
     </script>
 </div>
-            <div class="post__content">
-                <p>从今天开始，我的博客站将全面从 wordpress 转移到 hexo 上，佛系的迁移吧，慢慢来，我倒是不着急。</p>
+    <div class="post__content">
+        <p>从今天开始，我的博客站将全面从 wordpress 转移到 hexo 上，佛系的迁移吧，慢慢来，我倒是不着急。</p>
 <p>因为 wordpress 的国内体验实在是越来越差，后台反应慢、更新不可能、功能臃肿我用不到，花里胡哨的固然有好处，可视化编辑器确实很香，但是用了快2年，不想再折腾了，于是就选择 hexo 了</p>
 <p>而且最大的优势就是我可以把站点部署在 Coding 平台，然后开启静态页面服务，也就是不用再花钱买服务器了，我只要解析个自己的域名，配置配置就搞定，舒心</p>
 <p>转来转去，博客吧，我还是想回归写作的本质，排除一切繁杂，保留最原始的初心</p>
@@ -252,8 +240,8 @@
 <li>now：挑选整理文章</li>
 </ul>
 
-            </div>
-            
+    </div>
+    
     <div class="post__license">
         <p>
             <strong>本文作者：</strong>NightingaleWK
@@ -267,12 +255,12 @@
         
     </div>
  
-            <div class="post-footer__meta">
+    <div class="post-footer__meta">
     <p>
         更新于 2020-11-02
     </p>
 </div> 
-            <div class="post-meta__cats">
+    <div class="post-meta__cats">
     
         <a href="/categories/%E6%A0%91%E6%B4%9E/" class="post-cats__link button">树洞</a>
     
@@ -280,9 +268,34 @@
         <a href="/tags/%E9%9A%8F%E7%AC%94/" class="post-tags__link button"># 随笔</a>
     
 </div> 
-        </article>
-        
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/StupidDream01.html" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            中午睡过头的梦（1）
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+        </div>
     </div>
+
+
+
 
 
 </main>
@@ -299,7 +312,7 @@
     
         
         <p class="footer-copyright">
-            Copyright&nbsp;©&nbsp;2020&nbsp;<a href="/">雪漫城的风宅</a>
+            Copyright © 2020 <a href="/">雪漫城的风宅</a>
         </p>
     
     
@@ -365,10 +378,6 @@
             });
         }
     </script>
- 
-
- 
-    <script defer src="/js/b2t.js"></script>
  
 
  
