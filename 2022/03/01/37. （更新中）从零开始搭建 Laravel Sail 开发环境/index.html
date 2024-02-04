@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="https://cdn.blog.wkarrow.top/website/favicon-60x60-circle.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="https://cdn.blog.wkarrow.top/website/favicon-60x60-circle.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="https://cdn.blog.wkarrow.top/website/favicon-60x60-circle.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="https://cdn.blog.wkarrow.top/website/favicon-60x60-circle.png">
+    
+    
+        <link rel="mask-icon" href="https://cdn.blog.wkarrow.top/website/favicon-60x60-circle.png">
+    
+
+
+    <!-- meta -->
+
+
+<title>（更新中）从零开始搭建 laravel Sail 开发环境 | 雪漫城的风宅</title>
+
+
+    <meta name="keywords" content="laravel sail">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="之前的 laravel 开发环境均为 windows + homestead，一直都用得挺好没问题，但由于 Windows 11 的稳定性越来越好，并且内置的 WSL 也更新到了第二代，再加上 laravel 官方也将推荐的统一开发环境换成了 laravel Sail，啥也不说了，本着终生学习的态度，是时候放弃虚机，拥抱 docker 了。 通过几天的实际体验，给我最大的感受就是快，方方面面的快，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="（更新中）从零开始搭建 laravel Sail 开发环境">
+<meta property="og:url" content="https://www.wkarrow.top/2022/03/01/37.%20%EF%BC%88%E6%9B%B4%E6%96%B0%E4%B8%AD%EF%BC%89%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E6%90%AD%E5%BB%BA%20Laravel%20Sail%20%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/index.html">
+<meta property="og:site_name" content="雪漫城的风宅">
+<meta property="og:description" content="之前的 laravel 开发环境均为 windows + homestead，一直都用得挺好没问题，但由于 Windows 11 的稳定性越来越好，并且内置的 WSL 也更新到了第二代，再加上 laravel 官方也将推荐的统一开发环境换成了 laravel Sail，啥也不说了，本着终生学习的态度，是时候放弃虚机，拥抱 docker 了。 通过几天的实际体验，给我最大的感受就是快，方方面面的快，">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-03-01T09:00:00.000Z">
+<meta property="article:modified_time" content="2023-11-16T08:48:43.000Z">
+<meta property="article:author" content="NightingaleWK">
+<meta property="article:tag" content="laravel sail">
+<meta name="twitter:card" content="summary_large_image">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/default.css" media="none" >
+        
+            <link rel="stylesheet" id="hl-dark-theme" href="/css/highlight/dark.css" media="none">
+        
+    
+
+    
+    
+
+    
+    
+<link rel="stylesheet" href="/css/style/dark.css">
+
+    
+<script src="/js/darkmode.js"></script>
+
+
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+    <body>
+        <div id="app" tabindex="-1">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">雪漫城的风宅</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/friends/" class="navbar-menu button">友链</a>
+                
+                    <a href="/about/" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+    <a href="/search/" id="btn-search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="32"><path d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z"></path></svg>
+    </a>
+
+
+        
+        
+    <a href="javaScript:void(0);" id="btn-toggle-dark">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </a>
+
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/friends/" class="dropdown-menu button">友链</a>
+                
+                    <a href="/about/" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        （更新中）从零开始搭建 laravel Sail 开发环境
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2022/03/" class="post-meta__date button">2022-03-01</a>
+        
+    <span class="separate-dot"></span><a href="/categories/laravel/" class="button">laravel</a>
+
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <p>之前的 laravel 开发环境均为 windows + homestead，一直都用得挺好没问题，但由于 Windows 11 的稳定性越来越好，并且内置的 WSL 也更新到了第二代，再加上 laravel 官方也将推荐的统一开发环境换成了 laravel Sail，啥也不说了，本着终生学习的态度，是时候放弃虚机，拥抱 docker 了。</p>
+<p>通过几天的实际体验，给我最大的感受就是快，方方面面的快，环境启停迅速，配置也快，页面响应的也快，没别的，巴适的很。同时在 homestead 做的一切事情，在 docker 下也全能做到，完美</p>
+<p>在开始之前，我们需要检查如下几点是否已经做到</p>
+<ul>
+<li>Windows 10 or 11，并升级到系统最新版本</li>
+<li>受够虚机缓慢的相应和繁琐的配置</li>
+<li>热与学习新技术，不局限于当下</li>
+<li>爱折腾的心</li>
+</ul>
+<p>发稿时，我当前版本环境为</p>
+<ul>
+<li>windows 11 22H2</li>
+<li>docker 4.19.0</li>
+<li>laravel 10</li>
+</ul>
+<p>ok，让我们正式开始配置之旅吧，很简单</p>
+<h2 id="1-启用-wsl2"><a href="#1-启用-wsl2" class="headerlink" title="1. 启用 wsl2"></a>1. 启用 wsl2</h2><p>按 <code>Win + R</code> 。输入指令 <code>appwiz.cpl</code> 回车。</p>
+<p>在弹出窗的左侧点击 <code>启动或关闭 Windows 功能</code> ，在弹出窗内勾选 <code>适用于 Linux 的 Windows 子系统</code>、<code>Hyper-V</code> 和 <code>虚拟机平台</code> 。</p>
+<p>点击确定电脑会及自动安装，期间根据提示会有几次重启。</p>
+<p>重启完后，打开终端应用 <code>Windows Terminal</code> （以管理员方式运行），接下来我们需要设置 WSL 版本为 WSL2 ，并对系统进行更新</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wsl --set-default-version 2</span><br><span class="line">wsl --update</span><br></pre></td></tr></table></figure>
+<p>当然，关于更新这块，你也可以打开电脑设置中的 Windows更新，点击检查更新即可对 wsl 进行更新</p>
+<h2 id="2-安装-Ubuntu"><a href="#2-安装-Ubuntu" class="headerlink" title="2. 安装 Ubuntu"></a>2. 安装 Ubuntu</h2><p>当前我们的 Ubuntu TLS 版本为 22.04，我们在 Windows Terminal 中继续操作</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wsl --list --online    // 列出所有可安装的 linux 版本</span><br><span class="line">wsl --install -d Ubuntu-22.04    // 这行指令会安装 Ubuntu-22.04。该指令可能会提示网络错误，因为需要访问 ``https://raw.githubusercontent.com/microsoft/WSL/master/distributions/DistributionInfo.json`` 这个资源，请科学上网后重试该指令</span><br></pre></td></tr></table></figure>
+
+<p>系统安装完毕后会自动启动，进入 ubuntu 界面，等待初始化完毕后，需要设置一个 linux 账号，为了下文演示，我设置的账号密码为 <code>wangkai Admin@123</code></p>
+<p>完成后便可进入熟悉的命令行，关闭即可。以下是具体的执行效果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">PS C:\Users\djsyw&gt; wsl --list --online</span><br><span class="line">以下是可安装的有效分发的列表。</span><br><span class="line">使用 &#x27;wsl.exe --install &lt;Distro&gt;&#x27; 安装。</span><br><span class="line"></span><br><span class="line">NAME                                   FRIENDLY NAME</span><br><span class="line">Ubuntu                                 Ubuntu</span><br><span class="line">Debian                                 Debian GNU/Linux</span><br><span class="line">kali-linux                             Kali Linux Rolling</span><br><span class="line">Ubuntu-18.04                           Ubuntu 18.04 LTS</span><br><span class="line">Ubuntu-20.04                           Ubuntu 20.04 LTS</span><br><span class="line">Ubuntu-22.04                           Ubuntu 22.04 LTS</span><br><span class="line">OracleLinux_8_5                        Oracle Linux 8.5</span><br><span class="line">OracleLinux_7_9                        Oracle Linux 7.9</span><br><span class="line">SUSE-Linux-Enterprise-Server-15-SP4    SUSE Linux Enterprise Server 15 SP4</span><br><span class="line">openSUSE-Leap-15.4                     openSUSE Leap 15.4</span><br><span class="line">openSUSE-Tumbleweed                    openSUSE Tumbleweed</span><br><span class="line"></span><br><span class="line">PS C:\Users\djsyw&gt; wsl --install -d Ubuntu-22.04</span><br><span class="line">正在安装: Ubuntu 22.04 LTS</span><br><span class="line">已安装 Ubuntu 22.04 LTS。</span><br><span class="line">正在启动 Ubuntu 22.04 LTS...</span><br><span class="line">Installing, this may take a few minutes...</span><br><span class="line">Please create a default UNIX user account. The username does not need to match your Windows username.</span><br><span class="line">For more information visit: https://aka.ms/wslusers</span><br><span class="line">Enter new UNIX username: wangkai</span><br><span class="line">New password:</span><br><span class="line">Retype new password:</span><br><span class="line">passwd: password updated successfully</span><br><span class="line">Installation successful!</span><br><span class="line">To run a command as administrator (user &quot;root&quot;), use &quot;sudo &lt;command&gt;&quot;.</span><br><span class="line">See &quot;man sudo_root&quot; for details.</span><br><span class="line"></span><br><span class="line">Welcome to Ubuntu 22.04.2 LTS (GNU/Linux 5.15.90.1-microsoft-standard-WSL2 x86_64)</span><br><span class="line"></span><br><span class="line"> * Documentation:  https://help.ubuntu.com</span><br><span class="line"> * Management:     https://landscape.canonical.com</span><br><span class="line"> * Support:        https://ubuntu.com/advantage</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">This message is shown once a day. To disable it please create the</span><br><span class="line">/home/wangkai/.hushlogin file.</span><br><span class="line">wangkai@Surface-Pro-7:~$</span><br></pre></td></tr></table></figure>
+
+<p>以上安装 ubuntu 的步骤，也可以在应用商店直接搜索安装，也是一样的，相比指令更加直观。</p>
+<h2 id="3-安装-docker"><a href="#3-安装-docker" class="headerlink" title="3. 安装 docker"></a>3. 安装 docker</h2><p>前往 [Docker 官网][1] 下载最新的 Docker Desktop ，下载可能需要注册个免费账号，下载完成后打开安装包，一直下一步即可。</p>
+<p>安装完毕会提示注销一下电脑，根据提示操作即可</p>
+<h2 id="4-配置-docker"><a href="#4-配置-docker" class="headerlink" title="4. 配置 docker"></a>4. 配置 docker</h2><p>打开 docker 后，选择上方的齿轮（即设置）- Docker Engine，在右侧我们需要填写一下 docker 仓库的加速镜像，就是下方代码的 registry-mirrors 这块</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;builder&quot;: &#123;</span><br><span class="line">    &quot;gc&quot;: &#123;</span><br><span class="line">      &quot;defaultKeepStorage&quot;: &quot;20GB&quot;,</span><br><span class="line">      &quot;enabled&quot;: true</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;experimental&quot;: false,</span><br><span class="line">  &quot;features&quot;: &#123;</span><br><span class="line">    &quot;buildkit&quot;: true</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;registry-mirrors&quot;: [</span><br><span class="line">    &quot;https://hub-mirror.c.163.com&quot;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最后点击 Apply &amp; Restart ，进行重启，至此我们的 docker 配置就完事儿了。</p>
+<p>若你能够魔法上网，这一大步你啥也不用配置，官方的就是最好的，镜像会有几率出问题，我遇到很多次了。</p>
+<h1 id="5-创建测试项目"><a href="#5-创建测试项目" class="headerlink" title="5. 创建测试项目"></a>5. 创建测试项目</h1><p>为了解决 linux 子系统与 windows 之间文件传输缓慢的问题，我们的代码直接放在linux中，不要放在 windows 里，我们打开 vs code，安装 remote - WSL 扩展，完成后点击窗口左下角，选择 new WSL window，vs code 会下载必要的数据，完成后，在左侧选择打开文件夹，我默认代码放在 &#x2F;home&#x2F;wangkai 的家目录中，点击确定即可</p>
+<p>在左侧右键新建 code 文件夹，并对其右键，选择在集成终端中打开，在命令行中输入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -s https://laravel.build/example-app | bash</span><br></pre></td></tr></table></figure>
+<p>接下来就会自动安装代码到本地</p>
+<h1 id="6-部署已有项目（已适配docker）并启动"><a href="#6-部署已有项目（已适配docker）并启动" class="headerlink" title="6. 部署已有项目（已适配docker）并启动"></a>6. 部署已有项目（已适配docker）并启动</h1><p>更多情况下，我们的工程项目一般不是在 docker 环境跑的，基本都是在 lnmp 的环境下开发和部署（win 环境？异端！烧了！），比如我们经常使用的“本地 homestead 开发 + 线上 lnmp 部署”思路。下面我们就切换我们的开发方式，修改为“本地 docker 开发+线上 docker or lnmp 环境部署”的思路。</p>
+<p>首先我们先在 &#x2F;home&#x2F;wangkai 目录下新建一个名为 code 的目录，我们之后项目代码都放在这。这里我多说一些为啥这样操作，我们把代码放在 linux 中，而非放在 windows 中，目的就是解决了这两个系统数据传输的缓慢问题，这一点在我们使用 homestead 环境的时候尤其明显，用过的都知道，homestead 是吧 virtualbox 的 linux 虚机的一个目录 与 windows 的一个文件夹做了同步，你在任意一个系统中操作的代码都会同步到另一端，这期间就牵扯到跨系统，固然牵扯到跨系统带来的读写缓慢，而这里我们的一切都在 linux 中操作，你的代码、数据库、redis、nginx 都在 Linux<br>中，不与 windows 做交互，速度自然高。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /home/wangkai</span><br><span class="line">mkdir code</span><br></pre></td></tr></table></figure>
+
+<p>然后我们再从远端 git 仓库 clone 下一份全新的代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd ~/code</span><br><span class="line">git clone git@github.com:NightingaleWK/yanjiv2.git yanjiv2</span><br></pre></td></tr></table></figure>
+
+<p>注意，这里我使用的是 ssh-key 的方式拉的代码到本地，你也可以使用 https 的方式，只不过需要每次都输入账号密码，用 ssh-key 的方法是实现了免密，比较方便。关于如何实现 ssh-key 的方式操作 git，请自行百度或者等我佛系更新一下。</p>
+<p>之后我们复制一份 .env 出来，并根据实际修改其中的内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">cd yanjiv2</span><br><span class="line">cp .env.example .env</span><br><span class="line">vim .env</span><br><span class="line"></span><br><span class="line">然后开始你的修改就行了，修改完毕保存退出 .env，下面是修改的例子</span><br><span class="line"></span><br><span class="line">APP_NAME=yanjiv2</span><br><span class="line">APP_ENV=local</span><br><span class="line">APP_KEY=</span><br><span class="line">APP_DEBUG=true</span><br><span class="line">APP_URL=http://localhost</span><br><span class="line"></span><br><span class="line">LOG_CHANNEL=stack</span><br><span class="line">LOG_DEPRECATIONS_CHANNEL=null</span><br><span class="line">LOG_LEVEL=debug</span><br><span class="line"></span><br><span class="line">DB_CONNECTION=mysql</span><br><span class="line">DB_HOST=mysql</span><br><span class="line">DB_PORT=3306</span><br><span class="line">DB_DATABASE=yanjiv2</span><br><span class="line">DB_USERNAME=sail</span><br><span class="line">DB_PASSWORD=password</span><br><span class="line"></span><br><span class="line">BROADCAST_DRIVER=log</span><br><span class="line">CACHE_DRIVER=file</span><br><span class="line">FILESYSTEM_DRIVER=local</span><br><span class="line">QUEUE_CONNECTION=sync</span><br><span class="line">SESSION_DRIVER=file</span><br><span class="line">SESSION_LIFETIME=120</span><br><span class="line"></span><br><span class="line">MEMCACHED_HOST=127.0.0.1</span><br><span class="line"></span><br><span class="line">REDIS_HOST=127.0.0.1</span><br><span class="line">REDIS_PASSWORD=null</span><br><span class="line">REDIS_PORT=6379</span><br><span class="line"></span><br><span class="line">MAIL_MAILER=smtp</span><br><span class="line">MAIL_HOST=mailhog</span><br><span class="line">MAIL_PORT=1025</span><br><span class="line">MAIL_USERNAME=null</span><br><span class="line">MAIL_PASSWORD=null</span><br><span class="line">MAIL_ENCRYPTION=null</span><br><span class="line">MAIL_FROM_ADDRESS=null</span><br><span class="line">MAIL_FROM_NAME=&quot;$&#123;APP_NAME&#125;&quot;</span><br><span class="line"></span><br><span class="line">AWS_ACCESS_KEY_ID=</span><br><span class="line">AWS_SECRET_ACCESS_KEY=</span><br><span class="line">AWS_DEFAULT_REGION=us-east-1</span><br><span class="line">AWS_BUCKET=</span><br><span class="line">AWS_USE_PATH_STYLE_ENDPOINT=false</span><br><span class="line"></span><br><span class="line">PUSHER_APP_ID=</span><br><span class="line">PUSHER_APP_KEY=</span><br><span class="line">PUSHER_APP_SECRET=</span><br><span class="line">PUSHER_APP_CLUSTER=mt1</span><br><span class="line"></span><br><span class="line">MIX_PUSHER_APP_KEY=&quot;$&#123;PUSHER_APP_KEY&#125;&quot;</span><br><span class="line">MIX_PUSHER_APP_CLUSTER=&quot;$&#123;PUSHER_APP_CLUSTER&#125;&quot;</span><br><span class="line"></span><br><span class="line"># 环境是HTTPS环境，则为 true，否则请填写 false</span><br><span class="line">ADMIN_HTTPS=false</span><br><span class="line"></span><br><span class="line"># 环境若为windows，则为 true，否则请填写 false。这里影响维修工单导出时图片的显示</span><br><span class="line">MAINTENANCE_EXPORT_DEV_MODE=false</span><br></pre></td></tr></table></figure>
+
+<p>然后我们在 ubunut 中，跳转到项目根目录，执行如下代码来运行 composer install 指令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">docker run --rm \</span><br><span class="line">    -u &quot;$(id -u):$(id -g)&quot; \</span><br><span class="line">    -v &quot;$(pwd):/var/www/html&quot; \</span><br><span class="line">    -w /var/www/html \</span><br><span class="line">    laravelsail/php82-composer:latest \</span><br><span class="line">    composer install --ignore-platform-reqs</span><br></pre></td></tr></table></figure>
+<p>这样我们就可以在 ubuntu 没装 composer 的情况下运行composer命令，这个命令使用一个包含 PHP 与 Composer 的小型 Docker 容器进行应用程序依赖的安装。</p>
+<p>当你使用 laravelsail&#x2F;phpXX-composer 镜像时，你应该选择和你的应用程序所用环境相同的 PHP 版本（74、80、81 或 82）</p>
+<p>默认情况下，Sail 命令使用 vendor&#x2F;bin&#x2F;sail 脚本调用，该脚本已包含在所有新建的 laravel 应用程序中：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./vendor/bin/sail up</span><br></pre></td></tr></table></figure>
+
+<p>但与其重复的输入 vendor&#x2F;bin&#x2F;sail 来执行 Sail 命令，你可能会希望配置一个 Shell 别名方便你更容易的执行 Sail 命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alias sail=&#x27;[ -f sail ] &amp;&amp; sh sail || sh vendor/bin/sail&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>为了确保这一点始终可用，你可以把它添加到你的主目录下的 shell 配置文件中，如 ~&#x2F;.zshrc 或 ~&#x2F;.bashrc ，然后重新启动你的 shell。</p>
+<p>一旦配置了 shell 别名，你可以通过简单地输入 sail 来执行 Sail 命令。本文接下来的示例都假定你已经配置了此别名：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sail up</span><br></pre></td></tr></table></figure>
+
+<p>具体执行效果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br></pre></td><td class="code"><pre><span class="line">wangkai@PRECISION-7920:~$ cd code/yanjiv2/</span><br><span class="line">wangkai@PRECISION-7920:~/code/yanjiv2$ sail up</span><br><span class="line">[+] Running 65/7</span><br><span class="line"> ✔ redis 6 layers [⣿⣿⣿⣿⣿⣿]      0B/0B      Pulled                                                         25.3s</span><br><span class="line"> ✔ mailpit 2 layers [⣿⣿]      0B/0B      Pulled                                                           44.8s</span><br><span class="line"> ! laravel.test Warning                                                                                    2.5s</span><br><span class="line"> ✔ memcached 5 layers [⣿⣿⣿⣿⣿]      0B/0B      Pulled                                                      52.5s</span><br><span class="line"> ✔ selenium 33 layers [⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿]      0B/0B      Pulled                         146.5s</span><br><span class="line"> ✔ meilisearch 5 layers [⣿⣿⣿⣿⣿]      0B/0B      Pulled                                                    58.0s</span><br><span class="line"> ✔ mysql 7 layers [⣿⣿⣿⣿⣿⣿⣿]      0B/0B      Pulled                                                        60.4s</span><br><span class="line">[+] Building 568.7s (16/16) FINISHED</span><br><span class="line"> =&gt; [internal] load build definition from Dockerfile                                                                                                                                                                                                   0.1s</span><br><span class="line"> =&gt; =&gt; transferring dockerfile: 2.74kB                                                                                                                                                                                                                 0.0s</span><br><span class="line"> =&gt; [internal] load .dockerignore                                                                                                                                                                                                                      0.1s</span><br><span class="line"> =&gt; =&gt; transferring context: 2B                                                                                                                                                                                                                        0.0s</span><br><span class="line"> =&gt; [internal] load metadata for docker.io/library/ubuntu:22.04                                                                                                                                                                                        2.9s</span><br><span class="line"> =&gt; [internal] load build context                                                                                                                                                                                                                      0.0s</span><br><span class="line"> =&gt; =&gt; transferring context: 907B                                                                                                                                                                                                                      0.0s</span><br><span class="line"> =&gt; [ 1/11] FROM docker.io/library/ubuntu:22.04@sha256:9dc05cf19a5745c33b9327dba850480dae80310972dea9b05052162e7c7f2763                                                                                                                                7.1s</span><br><span class="line"> =&gt; =&gt; resolve docker.io/library/ubuntu:22.04@sha256:9dc05cf19a5745c33b9327dba850480dae80310972dea9b05052162e7c7f2763                                                                                                                                  0.0s</span><br><span class="line"> =&gt; =&gt; sha256:9dc05cf19a5745c33b9327dba850480dae80310972dea9b05052162e7c7f2763 1.20kB / 1.20kB                                                                                                                                                         0.0s</span><br><span class="line"> =&gt; =&gt; sha256:965fbcae990b0467ed5657caceaec165018ef44a4d2d46c7cdea80a9dff0d1ea 529B / 529B                                                                                                                                                             0.0s</span><br><span class="line"> =&gt; =&gt; sha256:6b7dfa7e8fdbe18ad425dd965a1049d984f31cf0ad57fa6d5377cca355e65f03 1.46kB / 1.46kB                                                                                                                                                         0.0s</span><br><span class="line"> =&gt; =&gt; sha256:6e3729cf69e0ce2de9e779575a1fec8b7fb5efdfa822829290ab6d5d1bc3e797 30.43MB / 30.43MB                                                                                                                                                       6.2s</span><br><span class="line"> =&gt; =&gt; extracting sha256:6e3729cf69e0ce2de9e779575a1fec8b7fb5efdfa822829290ab6d5d1bc3e797                                                                                                                                                              0.7s</span><br><span class="line"> =&gt; [ 2/11] WORKDIR /var/www/html                                                                                                                                                                                                                      1.5s</span><br><span class="line"> =&gt; [ 3/11] RUN ln -snf /usr/share/zoneinfo/UTC /etc/localtime &amp;&amp; echo UTC &gt; /etc/timezone                                                                                                                                                             0.8s</span><br><span class="line"> =&gt; [ 4/11] RUN apt-get update     &amp;&amp; apt-get install -y gnupg gosu curl ca-certificates zip unzip git supervisor sqlite3 libcap2-bin libpng-dev python2 dnsutils librsvg2-bin     &amp;&amp; curl -sS &#x27;https://keyserver.ubuntu.com/pks/lookup?op=get&amp;sear  542.9s</span><br><span class="line"> =&gt; [ 5/11] RUN setcap &quot;cap_net_bind_service=+ep&quot; /usr/bin/php8.2                                                                                                                                                                                      0.7s</span><br><span class="line"> =&gt; [ 6/11] RUN groupadd --force -g 1000 sail                                                                                                                                                                                                          0.6s</span><br><span class="line"> =&gt; [ 7/11] RUN useradd -ms /bin/bash --no-user-group -g 1000 -u 1337 sail                                                                                                                                                                             0.7s</span><br><span class="line"> =&gt; [ 8/11] COPY start-container /usr/local/bin/start-container                                                                                                                                                                                        0.1s</span><br><span class="line"> =&gt; [ 9/11] COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf                                                                                                                                                                              0.1s</span><br><span class="line"> =&gt; [10/11] COPY php.ini /etc/php/8.2/cli/conf.d/99-sail.ini                                                                                                                                                                                           0.1s</span><br><span class="line"> =&gt; [11/11] RUN chmod +x /usr/local/bin/start-container                                                                                                                                                                                                0.7s</span><br><span class="line"> =&gt; exporting to image                                                                                                                                                                                                                                10.5s</span><br><span class="line"> =&gt; =&gt; exporting layers                                                                                                                                                                                                                               10.5s</span><br><span class="line"> =&gt; =&gt; writing image sha256:ba56461e171b7ca24bba5c554ab4fa9af1dfee46f15e432132b6999b94bd07b4                                                                                                                                                           0.0s</span><br><span class="line"> =&gt; =&gt; naming to sail-8.2/app                                                                                                                                                                                                                          0.0s</span><br><span class="line">[+] Running 11/11</span><br><span class="line"> ✔ Network yanjiv2_sail               Created                                                                                                                                                                                                          0.1s</span><br><span class="line"> ✔ Volume &quot;yanjiv2_sail-meilisearch&quot;  Created                                                                                                                                                                                                          0.0s</span><br><span class="line"> ✔ Volume &quot;yanjiv2_sail-mysql&quot;        Created                                                                                                                                                                                                          0.0s</span><br><span class="line"> ✔ Volume &quot;yanjiv2_sail-redis&quot;        Created                                                                                                                                                                                                          0.0s</span><br><span class="line"> ✔ Container yanjiv2-mysql-1          Created                                                                                                                                                                                                          0.2s</span><br><span class="line"> ✔ Container yanjiv2-selenium-1       Created                                                                                                                                                                                                          0.2s</span><br><span class="line"> ✔ Container yanjiv2-redis-1          Created                                                                                                                                                                                                          0.2s</span><br><span class="line"> ✔ Container yanjiv2-memcached-1      Created                                                                                                                                                                                                          0.2s</span><br><span class="line"> ✔ Container yanjiv2-meilisearch-1    Created                                                                                                                                                                                                          0.2s</span><br><span class="line"> ✔ Container yanjiv2-mailpit-1        Created                                                                                                                                                                                                          0.2s</span><br><span class="line"> ✔ Container yanjiv2-laravel.test-1   Created                                                                                                                                                                                                          0.1s</span><br><span class="line">Attaching to yanjiv2-laravel.test-1, yanjiv2-mailpit-1, yanjiv2-meilisearch-1, yanjiv2-memcached-1, yanjiv2-mysql-1, yanjiv2-redis-1, yanjiv2-selenium-1</span><br><span class="line">yanjiv2-selenium-1      | 2023-05-05 06:47:12,672 INFO Included extra file &quot;/etc/supervisor/conf.d/selenium.conf&quot; during parsing</span><br><span class="line">yanjiv2-selenium-1      | 2023-05-05 06:47:12,676 INFO RPC interface &#x27;supervisor&#x27; initialized</span><br><span class="line">yanjiv2-selenium-1      | 2023-05-05 06:47:12,677 CRIT Server &#x27;unix_http_server&#x27; running without any HTTP authentication checking</span><br><span class="line">yanjiv2-selenium-1      | 2023-05-05 06:47:12,677 INFO supervisord started with pid 8</span><br><span class="line">yanjiv2-redis-1         | 1:C 05 May 2023 06:47:12.892 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo</span><br><span class="line">yanjiv2-redis-1         | 1:C 05 May 2023 06:47:12.892 # Redis version=7.0.11, bits=64, commit=00000000, modified=0, pid=1, just started</span><br><span class="line">yanjiv2-redis-1         | 1:C 05 May 2023 06:47:12.892 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf</span><br><span class="line">yanjiv2-redis-1         | 1:M 05 May 2023 06:47:12.893 * monotonic clock: POSIX clock_gettime</span><br><span class="line">yanjiv2-redis-1         | 1:M 05 May 2023 06:47:12.893 * Running mode=standalone, port=6379.</span><br><span class="line">yanjiv2-redis-1         | 1:M 05 May 2023 06:47:12.893 # Server initialized</span><br><span class="line">yanjiv2-redis-1         | 1:M 05 May 2023 06:47:12.893 # WARNING Memory overcommit must be enabled! Without it, a background save or replication may fail under low memory condition. Being disabled, it can can also cause failures without low memory condition, see https://github.com/jemalloc/jemalloc/issues/1328. To fix this issue add &#x27;vm.overcommit_memory = 1&#x27; to /etc/sysctl.conf and then reboot or run the command &#x27;sysctl vm.overcommit_memory=1&#x27; for this to take effect.</span><br><span class="line">yanjiv2-redis-1         | 1:M 05 May 2023 06:47:12.894 * Ready to accept connections</span><br><span class="line">yanjiv2-mysql-1         | [Entrypoint] MySQL Docker Image 8.0.32-1.2.11-server</span><br><span class="line">yanjiv2-mailpit-1       | INFO[2023/05/05 06:47:13] [smtpd] starting on 0.0.0.0:1025</span><br><span class="line">yanjiv2-mailpit-1       | INFO[2023/05/05 06:47:13] [http] starting server on http://0.0.0.0:8025/</span><br><span class="line">yanjiv2-mysql-1         | [Entrypoint] Initializing database</span><br><span class="line">yanjiv2-mysql-1         | 2023-05-05T06:47:13.388634Z 0 [Warning] [MY-011068] [Server] The syntax &#x27;--skip-host-cache&#x27; is deprecated and will be removed in a future release. Please use SET GLOBAL host_cache_size=0 instead.</span><br><span class="line">yanjiv2-mysql-1         | 2023-05-05T06:47:13.388730Z 0 [System] [MY-013169] [Server] /usr/sbin/mysqld (mysqld 8.0.32) initializing of server in progress as process 17</span><br><span class="line">yanjiv2-mysql-1         | 2023-05-05T06:47:13.399393Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.</span><br><span class="line">yanjiv2-selenium-1      | 2023-05-05 06:47:13,681 INFO spawned: &#x27;xvfb&#x27; with pid 10</span><br><span class="line">yanjiv2-selenium-1      | 2023-05-05 06:47:13,683 INFO spawned: &#x27;vnc&#x27; with pid 11</span><br><span class="line">yanjiv2-selenium-1      | 2023-05-05 06:47:13,686 INFO spawned: &#x27;novnc&#x27; with pid 13</span><br><span class="line">yanjiv2-selenium-1      | 2023-05-05 06:47:13,691 INFO spawned: &#x27;selenium-standalone&#x27; with pid 18</span><br><span class="line">yanjiv2-selenium-1      | Setting up SE_NODE_GRID_URL...</span><br><span class="line">yanjiv2-selenium-1      | 2023-05-05 06:47:13,705 INFO success: xvfb entered RUNNING state, process has stayed up for &gt; than 0 seconds (startsecs)</span><br><span class="line">yanjiv2-selenium-1      | 2023-05-05 06:47:13,705 INFO success: vnc entered RUNNING state, process has stayed up for &gt; than 0 seconds (startsecs)</span><br><span class="line">yanjiv2-selenium-1      | 2023-05-05 06:47:13,705 INFO success: novnc entered RUNNING state, process has stayed up for &gt; than 0 seconds (startsecs)</span><br><span class="line">yanjiv2-selenium-1      | 2023-05-05 06:47:13,705 INFO success: selenium-standalone entered RUNNING state, process has stayed up for &gt; than 0 seconds (startsecs)</span><br><span class="line">yanjiv2-selenium-1      | Selenium Grid Standalone configuration:</span><br><span class="line">yanjiv2-selenium-1      | [network]</span><br><span class="line">yanjiv2-selenium-1      | relax-checks = true</span><br><span class="line">yanjiv2-selenium-1      |</span><br><span class="line">yanjiv2-selenium-1      | [node]</span><br><span class="line">yanjiv2-selenium-1      | session-timeout = &quot;300&quot;</span><br><span class="line">yanjiv2-selenium-1      | override-max-sessions = false</span><br><span class="line">yanjiv2-selenium-1      | detect-drivers = false</span><br><span class="line">yanjiv2-selenium-1      | drain-after-session-count = 0</span><br><span class="line">yanjiv2-selenium-1      | max-sessions = 1</span><br><span class="line">yanjiv2-selenium-1      |</span><br><span class="line">yanjiv2-selenium-1      | [[node.driver-configuration]]</span><br><span class="line">yanjiv2-selenium-1      | display-name = &quot;chrome&quot;</span><br><span class="line">yanjiv2-selenium-1      | stereotype = &#x27;&#123;&quot;browserName&quot;: &quot;chrome&quot;, &quot;browserVersion&quot;: &quot;112.0&quot;, &quot;platformName&quot;: &quot;Linux&quot;&#125;&#x27;</span><br><span class="line">yanjiv2-selenium-1      | max-sessions = 1</span><br><span class="line">yanjiv2-selenium-1      |</span><br><span class="line">yanjiv2-selenium-1      | Starting Selenium Grid Standalone...</span><br><span class="line">yanjiv2-selenium-1      | Tracing is disabled</span><br><span class="line">yanjiv2-mysql-1         | 2023-05-05T06:47:14.006754Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.</span><br><span class="line">yanjiv2-selenium-1      | 06:47:14.251 INFO [LoggingOptions.configureLogEncoding] - Using the system default encoding</span><br><span class="line">yanjiv2-selenium-1      | 06:47:14.258 INFO [OpenTelemetryTracer.createTracer] - Using OpenTelemetry for tracing</span><br><span class="line">yanjiv2-laravel.test-1  | 2023-05-05 06:47:14,290 INFO Set uid to user 0 succeeded</span><br><span class="line">yanjiv2-laravel.test-1  | 2023-05-05 06:47:14,292 INFO supervisord started with pid 1</span><br><span class="line">yanjiv2-selenium-1      | 06:47:15.076 INFO [NodeOptions.getSessionFactories] - Detected 20 available processors</span><br><span class="line">yanjiv2-selenium-1      | 06:47:15.134 INFO [NodeOptions.report] - Adding chrome for &#123;&quot;browserVersion&quot;: &quot;112.0&quot;,&quot;se:noVncPort&quot;: 7900,&quot;browserName&quot;: &quot;chrome&quot;,&quot;platformName&quot;: &quot;LINUX&quot;,&quot;se:vncEnabled&quot;: true&#125; 1 times (Host)</span><br><span class="line">yanjiv2-selenium-1      | 06:47:15.153 INFO [Node.&lt;init&gt;] - Binding additional locator mechanisms: relative</span><br><span class="line">yanjiv2-selenium-1      | 06:47:15.176 INFO [GridModel.setAvailability] - Switching Node 9fac02ef-1d70-409d-8b15-a74e93fb0f25 (uri: http://172.18.0.2:4444) from DOWN to UP</span><br><span class="line">yanjiv2-selenium-1      | 06:47:15.177 INFO [LocalDistributor.add] - Added node 9fac02ef-1d70-409d-8b15-a74e93fb0f25 at http://172.18.0.2:4444. Health check every 120s</span><br><span class="line">yanjiv2-laravel.test-1  | 2023-05-05 06:47:15,295 INFO spawned: &#x27;php&#x27; with pid 16</span><br><span class="line">yanjiv2-meilisearch-1   |</span><br><span class="line">yanjiv2-meilisearch-1   | 888b     d888          d8b 888 d8b                                            888</span><br><span class="line">yanjiv2-meilisearch-1   | 8888b   d8888          Y8P 888 Y8P                                            888</span><br><span class="line">yanjiv2-meilisearch-1   | 88888b.d88888              888                                                888</span><br><span class="line">yanjiv2-meilisearch-1   | 888Y88888P888  .d88b.  888 888 888 .d8888b   .d88b.   8888b.  888d888 .d8888b 88888b.</span><br><span class="line">yanjiv2-meilisearch-1   | 888 Y888P 888 d8P  Y8b 888 888 888 88K      d8P  Y8b     &quot;88b 888P&quot;  d88P&quot;    888 &quot;88b</span><br><span class="line">yanjiv2-meilisearch-1   | 888  Y8P  888 88888888 888 888 888 &quot;Y8888b. 88888888 .d888888 888    888      888  888</span><br><span class="line">yanjiv2-meilisearch-1   | 888   &quot;   888 Y8b.     888 888 888      X88 Y8b.     888  888 888    Y88b.    888  888</span><br><span class="line">yanjiv2-meilisearch-1   | 888       888  &quot;Y8888  888 888 888  88888P&#x27;  &quot;Y8888  &quot;Y888888 888     &quot;Y8888P 888  888</span><br><span class="line">yanjiv2-meilisearch-1   |</span><br><span class="line">yanjiv2-meilisearch-1   | Config file path:     &quot;none&quot;</span><br><span class="line">yanjiv2-meilisearch-1   | Database path:                &quot;./data.ms&quot;</span><br><span class="line">yanjiv2-meilisearch-1   | Server listening on:  &quot;http://0.0.0.0:7700&quot;</span><br><span class="line">yanjiv2-meilisearch-1   | Environment:          &quot;development&quot;</span><br><span class="line">yanjiv2-meilisearch-1   | Commit SHA:           &quot;4b953d62fbab81278324e71b4037eb06355dd49a&quot;</span><br><span class="line">yanjiv2-meilisearch-1   | Commit date:          &quot;2023-04-13T16:24:16+00:00&quot;</span><br><span class="line">yanjiv2-meilisearch-1   | Package version:      &quot;1.1.1&quot;</span><br><span class="line">yanjiv2-meilisearch-1   |</span><br><span class="line">yanjiv2-meilisearch-1   | Thank you for using Meilisearch!</span><br><span class="line">yanjiv2-meilisearch-1   |</span><br><span class="line">yanjiv2-meilisearch-1   |</span><br><span class="line">yanjiv2-meilisearch-1   | We collect anonymized analytics to improve our product and your experience. To learn more, including how to turn off analytics, visit our dedicated documentation page: https://docs.meilisearch.com/learn/what_is_meilisearch/telemetry.html</span><br><span class="line">yanjiv2-meilisearch-1   |</span><br><span class="line">yanjiv2-meilisearch-1   | Anonymous telemetry:  &quot;Enabled&quot;</span><br><span class="line">yanjiv2-meilisearch-1   | Instance UID:         &quot;073aa49c-374d-4af8-bb0c-5e0b8ef95b38&quot;</span><br><span class="line">yanjiv2-meilisearch-1   |</span><br><span class="line">yanjiv2-meilisearch-1   |</span><br><span class="line">yanjiv2-meilisearch-1   |</span><br><span class="line">yanjiv2-meilisearch-1   |  No master key was found. The server will accept unidentified requests.</span><br><span class="line">yanjiv2-meilisearch-1   |</span><br><span class="line">yanjiv2-meilisearch-1   |  A master key of at least 16 bytes will be required when switching to a production environment.</span><br><span class="line">yanjiv2-meilisearch-1   |</span><br><span class="line">yanjiv2-meilisearch-1   |</span><br><span class="line">yanjiv2-meilisearch-1   | We generated a new secure master key for you (you can safely use this token):</span><br><span class="line">yanjiv2-meilisearch-1   |</span><br><span class="line">yanjiv2-meilisearch-1   | &gt;&gt; --master-key XVIX1t9QZsTQN6nz7uSS8Y71qPUIdohggUxIWeCR8gg &lt;&lt;</span><br><span class="line">yanjiv2-meilisearch-1   |</span><br><span class="line">yanjiv2-meilisearch-1   | Restart Meilisearch with the argument above to use this new and secure master key.</span><br><span class="line">yanjiv2-meilisearch-1   |</span><br><span class="line">yanjiv2-meilisearch-1   | Documentation:                https://docs.meilisearch.com</span><br><span class="line">yanjiv2-meilisearch-1   | Source code:          https://github.com/meilisearch/meilisearch</span><br><span class="line">yanjiv2-meilisearch-1   | Contact:              https://docs.meilisearch.com/resources/contact.html</span><br><span class="line">yanjiv2-meilisearch-1   |</span><br><span class="line">yanjiv2-meilisearch-1   | [2023-05-05T06:47:15Z INFO  actix_server::builder] Starting 10 workers</span><br><span class="line">yanjiv2-meilisearch-1   | [2023-05-05T06:47:15Z INFO  actix_server::server] Actix runtime found; starting in Actix runtime</span><br><span class="line">yanjiv2-selenium-1      | 06:47:15.381 INFO [Standalone.execute] - Started Selenium Standalone 4.9.0 (revision d7057100a6): http://172.18.0.2:4444</span><br><span class="line">yanjiv2-laravel.test-1  | Starting laravel development server: http://0.0.0.0:80</span><br><span class="line">yanjiv2-laravel.test-1  | [Fri May  5 06:47:15 2023] PHP 8.2.5 Development Server (http://0.0.0.0:80) started</span><br><span class="line">yanjiv2-mysql-1         | 2023-05-05T06:47:16.298633Z 6 [Warning] [MY-010453] [Server] root@localhost is created with an empty password ! Please consider switching off the --initialize-insecure option.</span><br><span class="line">yanjiv2-laravel.test-1  | 2023-05-05 06:47:17,205 INFO success: php entered RUNNING state, process has stayed up for &gt; than 1 seconds (startsecs)</span><br><span class="line">yanjiv2-mysql-1         | [Entrypoint] Database initialized</span><br><span class="line">yanjiv2-mysql-1         | 2023-05-05T06:47:21.867567Z 0 [Warning] [MY-011068] [Server] The syntax &#x27;--skip-host-cache&#x27; is deprecated and will be removed in a future release. Please use SET GLOBAL host_cache_size=0 instead.</span><br><span class="line">yanjiv2-mysql-1         | 2023-05-05T06:47:21.869445Z 0 [System] [MY-010116] [Server] /usr/sbin/mysqld (mysqld 8.0.32) starting as process 60</span><br><span class="line">yanjiv2-mysql-1         | 2023-05-05T06:47:21.903451Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.</span><br><span class="line">yanjiv2-mysql-1         | 2023-05-05T06:47:22.074419Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.</span><br><span class="line">yanjiv2-mysql-1         | 2023-05-05T06:47:22.447280Z 0 [Warning] [MY-010068] [Server] CA certificate ca.pem is self signed.</span><br><span class="line">yanjiv2-mysql-1         | 2023-05-05T06:47:22.447388Z 0 [System] [MY-013602] [Server] Channel mysql_main configured to support TLS. Encrypted connections are now supported for this channel.</span><br><span class="line">yanjiv2-mysql-1         | 2023-05-05T06:47:22.494594Z 0 [System] [MY-011323] [Server] X Plugin ready for connections. Socket: /var/run/mysqld/mysqlx.sock</span><br><span class="line">yanjiv2-mysql-1         | 2023-05-05T06:47:22.494863Z 0 [System] [MY-010931] [Server] /usr/sbin/mysqld: ready for connections. Version: &#x27;8.0.32&#x27;  socket: &#x27;/var/lib/mysql/mysql.sock&#x27;  port: 0  MySQL Community Server - GPL.</span><br><span class="line">yanjiv2-mysql-1         | Warning: Unable to load &#x27;/usr/share/zoneinfo/iso3166.tab&#x27; as time zone. Skipping it.</span><br><span class="line">yanjiv2-mysql-1         | Warning: Unable to load &#x27;/usr/share/zoneinfo/leapseconds&#x27; as time zone. Skipping it.</span><br><span class="line">yanjiv2-mysql-1         | Warning: Unable to load &#x27;/usr/share/zoneinfo/tzdata.zi&#x27; as time zone. Skipping it.</span><br><span class="line">yanjiv2-mysql-1         | Warning: Unable to load &#x27;/usr/share/zoneinfo/zone.tab&#x27; as time zone. Skipping it.</span><br><span class="line">yanjiv2-mysql-1         | Warning: Unable to load &#x27;/usr/share/zoneinfo/zone1970.tab&#x27; as time zone. Skipping it.</span><br><span class="line">yanjiv2-mysql-1         |</span><br><span class="line">yanjiv2-mysql-1         | [Entrypoint] running /docker-entrypoint-initdb.d/10-create-testing-database.sh</span><br><span class="line">yanjiv2-mysql-1         | mysql: [Warning] Using a password on the command line interface can be insecure.</span><br><span class="line">yanjiv2-mysql-1         |</span><br><span class="line">yanjiv2-mysql-1         | 2023-05-05T06:47:25.076164Z 15 [System] [MY-013172] [Server] Received SHUTDOWN from user root. Shutting down mysqld (Version: 8.0.32).</span><br><span class="line">yanjiv2-mysql-1         | 2023-05-05T06:47:26.390283Z 0 [System] [MY-010910] [Server] /usr/sbin/mysqld: Shutdown complete (mysqld 8.0.32)  MySQL Community Server - GPL.</span><br><span class="line">yanjiv2-mysql-1         | [Entrypoint] Server shut down</span><br><span class="line">yanjiv2-mysql-1         |</span><br><span class="line">yanjiv2-mysql-1         | [Entrypoint] MySQL init process done. Ready for start up.</span><br><span class="line">yanjiv2-mysql-1         |</span><br><span class="line">yanjiv2-mysql-1         | [Entrypoint] Starting MySQL 8.0.32-1.2.11-server</span><br><span class="line">yanjiv2-mysql-1         | 2023-05-05T06:47:27.300132Z 0 [Warning] [MY-011068] [Server] The syntax &#x27;--skip-host-cache&#x27; is deprecated and will be removed in a future release. Please use SET GLOBAL host_cache_size=0 instead.</span><br><span class="line">yanjiv2-mysql-1         | 2023-05-05T06:47:27.301672Z 0 [System] [MY-010116] [Server] /usr/sbin/mysqld (mysqld 8.0.32) starting as process 1</span><br><span class="line">yanjiv2-mysql-1         | 2023-05-05T06:47:27.316952Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.</span><br><span class="line">yanjiv2-mysql-1         | 2023-05-05T06:47:27.452872Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.</span><br><span class="line">yanjiv2-mysql-1         | 2023-05-05T06:47:27.736549Z 0 [Warning] [MY-010068] [Server] CA certificate ca.pem is self signed.</span><br><span class="line">yanjiv2-mysql-1         | 2023-05-05T06:47:27.736619Z 0 [System] [MY-013602] [Server] Channel mysql_main configured to support TLS. Encrypted connections are now supported for this channel.</span><br><span class="line">yanjiv2-mysql-1         | 2023-05-05T06:47:27.770036Z 0 [System] [MY-011323] [Server] X Plugin ready for connections. Bind-address: &#x27;::&#x27; port: 33060, socket: /var/run/mysqld/mysqlx.sock</span><br><span class="line">yanjiv2-mysql-1         | 2023-05-05T06:47:27.770200Z 0 [System] [MY-010931] [Server] /usr/sbin/mysqld: ready for connections. Version: &#x27;8.0.32&#x27;  socket: &#x27;/var/lib/mysql/mysql.sock&#x27;  port: 3306  MySQL Community Server - GPL.</span><br><span class="line">yanjiv2-laravel.test-1  | [Fri May  5 06:47:35 2023] 172.18.0.1:44704 Accepted</span><br><span class="line">yanjiv2-laravel.test-1  | [Fri May  5 06:47:35 2023] 172.18.0.1:44704 Closing</span><br><span class="line">yanjiv2-laravel.test-1  | [Fri May  5 06:47:35 2023] 172.18.0.1:44708 Accepted</span><br><span class="line">yanjiv2-laravel.test-1  | [Fri May  5 06:47:35 2023] 172.18.0.1:44708 Closing</span><br><span class="line">yanjiv2-laravel.test-1  | [Fri May  5 06:47:35 2023] 172.18.0.1:44716 Accepted</span><br><span class="line">yanjiv2-laravel.test-1  | [Fri May  5 06:47:35 2023] 172.18.0.1:44716 Closing</span><br><span class="line">yanjiv2-laravel.test-1  | [Fri May  5 06:47:35 2023] 172.18.0.1:44730 Accepted</span><br><span class="line">yanjiv2-laravel.test-1  | [Fri May  5 06:47:35 2023] 172.18.0.1:44730 Closing</span><br><span class="line">yanjiv2-laravel.test-1  | [Fri May  5 06:47:36 2023] 172.18.0.1:44744 Accepted</span><br><span class="line">yanjiv2-laravel.test-1  | [Fri May  5 06:47:36 2023] 172.18.0.1:44744 Closing</span><br><span class="line">yanjiv2-laravel.test-1  | [Fri May  5 06:47:36 2023] 172.18.0.1:44750 Accepted</span><br><span class="line">yanjiv2-laravel.test-1  | [Fri May  5 06:47:36 2023] 172.18.0.1:44750 [200]: GET /favicon.ico</span><br><span class="line">yanjiv2-laravel.test-1  | [Fri May  5 06:47:36 2023] 172.18.0.1:44750 Closing</span><br><span class="line">yanjiv2-meilisearch-1   | [2023-05-05T06:47:43Z INFO  actix_web::middleware::logger] 127.0.0.1 &quot;GET /health HTTP/1.1&quot; 200 22 &quot;-&quot; &quot;Wget&quot; 0.000301</span><br></pre></td></tr></table></figure>
+
+<p>如果没出意外的话，现在服务应该起来了，访问一下 localhost 就可以看到熟悉的 laravel 欢迎界面了。</p>
+<p>若提示“No application encryption key has been specified.”，点击报错页面的“Generate app key”，然后刷新一下就好了</p>
+<p>之后就和正常继续部署项目一样，但是记得把每行指令的 php artisan 改为 sail artisan，比如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">php artisan migrate:refresh --seed</span><br><span class="line">// to</span><br><span class="line">sail artisan migrate:refresh --seed</span><br><span class="line"></span><br><span class="line">composer i</span><br><span class="line">// to</span><br><span class="line">sail composer i</span><br></pre></td></tr></table></figure>
+
+<h1 id="7-部署已有项目（未适配-docker）并启动"><a href="#7-部署已有项目（未适配-docker）并启动" class="headerlink" title="7. 部署已有项目（未适配 docker）并启动"></a>7. 部署已有项目（未适配 docker）并启动</h1><p>更多情况下，我们的工程项目一般不是在 docker 环境跑的，基本都是在 lnmp 的环境下开发和部署（win 环境？异端！烧了！），比如我们经常使用的“本地 homestead 开发 + 线上 lnmp 部署”思路。下面我们就切换我们的开发方式，修改为“本地 docker 开发+线上 docker or lnmp 环境部署”的思路。</p>
+<p>首先我们先在 &#x2F;home&#x2F;wangkai 目录下新建一个名为 code 的目录，我们之后项目代码都放在这。这里我多说一些为啥这样操作，我们把代码放在 linux 中，而非放在 windows 中，目的就是解决了这两个系统数据传输的缓慢问题，这一点在我们使用 homestead 环境的时候尤其明显，用过的都知道，homestead 是吧 virtualbox 的 linux 虚机的一个目录 与 windows 的一个文件夹做了同步，你在任意一个系统中操作的代码都会同步到另一端，这期间就牵扯到跨系统，固然牵扯到跨系统带来的读写缓慢，而这里我们的一切都在 linux 中操作，你的代码、数据库、redis、nginx 都在 Linux<br>中，不与 windows 做交互，速度自然高。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /home/wangkai</span><br><span class="line">mkdir code</span><br></pre></td></tr></table></figure>
+
+<p>然后我们再从远端 git 仓库 clone 下一份全新的代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd ~/code</span><br><span class="line">git clone git@github.com:NightingaleWK/yanjiv2.git yanjiv2</span><br></pre></td></tr></table></figure>
+
+<p>注意，这里我使用的是 ssh-key 的方式拉的代码到本地，你也可以使用 https 的方式，只不过需要每次都输入账号密码，用 ssh-key 的方法是实现了免密，比较方便。关于如何实现 ssh-key 的方式操作 git，请自行百度或者等我佛系更新一下。</p>
+<p>之后我们复制一份 .env 出来，并根据实际修改其中的内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">cd yanjiv2</span><br><span class="line">cp .env.example .env</span><br><span class="line">vim .env</span><br><span class="line"></span><br><span class="line">然后开始你的修改就行了，修改完毕保存退出 .env，下面是修改的例子</span><br><span class="line"></span><br><span class="line">APP_NAME=yanjiv2</span><br><span class="line">APP_ENV=local</span><br><span class="line">APP_KEY=</span><br><span class="line">APP_DEBUG=true</span><br><span class="line">APP_URL=http://localhost</span><br><span class="line"></span><br><span class="line">LOG_CHANNEL=stack</span><br><span class="line">LOG_DEPRECATIONS_CHANNEL=null</span><br><span class="line">LOG_LEVEL=debug</span><br><span class="line"></span><br><span class="line">DB_CONNECTION=mysql</span><br><span class="line">DB_HOST=127.0.0.1</span><br><span class="line">DB_PORT=3306</span><br><span class="line">DB_DATABASE=yanjiv2</span><br><span class="line">DB_USERNAME=yanjiv2</span><br><span class="line">DB_PASSWORD=yanjiv2</span><br><span class="line"></span><br><span class="line">BROADCAST_DRIVER=log</span><br><span class="line">CACHE_DRIVER=file</span><br><span class="line">FILESYSTEM_DRIVER=local</span><br><span class="line">QUEUE_CONNECTION=sync</span><br><span class="line">SESSION_DRIVER=file</span><br><span class="line">SESSION_LIFETIME=120</span><br><span class="line"></span><br><span class="line">MEMCACHED_HOST=127.0.0.1</span><br><span class="line"></span><br><span class="line">REDIS_HOST=127.0.0.1</span><br><span class="line">REDIS_PASSWORD=null</span><br><span class="line">REDIS_PORT=6379</span><br><span class="line"></span><br><span class="line">MAIL_MAILER=smtp</span><br><span class="line">MAIL_HOST=mailhog</span><br><span class="line">MAIL_PORT=1025</span><br><span class="line">MAIL_USERNAME=null</span><br><span class="line">MAIL_PASSWORD=null</span><br><span class="line">MAIL_ENCRYPTION=null</span><br><span class="line">MAIL_FROM_ADDRESS=null</span><br><span class="line">MAIL_FROM_NAME=&quot;$&#123;APP_NAME&#125;&quot;</span><br><span class="line"></span><br><span class="line">AWS_ACCESS_KEY_ID=</span><br><span class="line">AWS_SECRET_ACCESS_KEY=</span><br><span class="line">AWS_DEFAULT_REGION=us-east-1</span><br><span class="line">AWS_BUCKET=</span><br><span class="line">AWS_USE_PATH_STYLE_ENDPOINT=false</span><br><span class="line"></span><br><span class="line">PUSHER_APP_ID=</span><br><span class="line">PUSHER_APP_KEY=</span><br><span class="line">PUSHER_APP_SECRET=</span><br><span class="line">PUSHER_APP_CLUSTER=mt1</span><br><span class="line"></span><br><span class="line">MIX_PUSHER_APP_KEY=&quot;$&#123;PUSHER_APP_KEY&#125;&quot;</span><br><span class="line">MIX_PUSHER_APP_CLUSTER=&quot;$&#123;PUSHER_APP_CLUSTER&#125;&quot;</span><br><span class="line"></span><br><span class="line"># 环境是HTTPS环境，则为 true，否则请填写 false</span><br><span class="line">ADMIN_HTTPS=false</span><br><span class="line"></span><br><span class="line"># 环境若为windows，则为 true，否则请填写 false。这里影响维修工单导出时图片的显示</span><br><span class="line">MAINTENANCE_EXPORT_DEV_MODE=false</span><br></pre></td></tr></table></figure>
+
+<p>本小节未完待续…<br>  [1]: <a target="_blank" rel="noopener" href="https://www.docker.com/">https://www.docker.com/</a></p>
+
+    </div>
+     
+    <div class="post-footer__meta"><p>更新于 2023-11-16</p></div> 
+    <div class="post-entry__tags"><a href="/tags/laravel-sail/" class="post-tags__link button"># laravel sail</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/2022/03/02/38.%20VS%20Code%20%E4%BD%BF%E7%94%A8%E5%85%AC%E9%92%A5%E9%85%8D%E5%90%88%20Remote%20SSH%20%E7%99%BB%E5%BD%95%E8%BF%9C%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            上一篇
+                        </div>
+                        <div class="nav__title">
+                            VS Code 使用公钥配合 Remote SSH 登录远程服务器
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/2021/12/21/36.%20Git%20Pull%20%E5%BC%BA%E5%88%B6%E6%8B%89%E5%8F%96%E6%AD%A5%E9%AA%A4/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            下一篇
+                        </div>
+                        <div class="nav__title">
+                            Git Pull 强制拉取步骤
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="回到顶部" title="回到顶部">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2024 <a href="/">雪漫城的风宅</a>
+        </p>
+    
+    
+        
+            <p><a href="https://beian.miit.gov.cn/" target="_blank">鲁ICP备17046331号-1</a></p>
+
+        
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+        
+    <script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.1.0/dist/lazyload.min.js"></script>
+    <script>
+        window.lazyLoadOptions = {
+            elements_selector: ".lazy",
+            threshold: 0
+        };
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+
+    
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.css">
+
+    
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.js"></script>
+
+    <script>
+        let lazyloadT = Boolean('true'),
+            auto_fancybox = Boolean('false')
+        if (auto_fancybox) {
+            $(".post__content").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        } else {
+            $(".post__content").find("fancybox").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        }
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>

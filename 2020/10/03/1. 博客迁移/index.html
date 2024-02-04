@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="https://cdn.blog.wkarrow.top/website/favicon-60x60-circle.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="https://cdn.blog.wkarrow.top/website/favicon-60x60-circle.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="https://cdn.blog.wkarrow.top/website/favicon-60x60-circle.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="https://cdn.blog.wkarrow.top/website/favicon-60x60-circle.png">
+    
+    
+        <link rel="mask-icon" href="https://cdn.blog.wkarrow.top/website/favicon-60x60-circle.png">
+    
+
+
+    <!-- meta -->
+
+
+<title>博客迁移 | 雪漫城的风宅</title>
+
+
+    <meta name="keywords" content="迁移">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="从今天开始，我的博客站将全面从 wordpress 转移到 hexo 上，佛系的迁移吧，慢慢来，我倒是不着急。 因为 wordpress 的国内体验实在是越来越差，后台反应慢、更新不可能、功能臃肿我用不到，花里胡哨的固然有好处，可视化编辑器确实很香，但是用了快2年，不想再折腾了，于是就选择 hexo 了 而且最大的优势就是我可以把站点部署在 Coding 平台，然后开启静态页面服务，也就是不用再花">
+<meta property="og:type" content="article">
+<meta property="og:title" content="博客迁移">
+<meta property="og:url" content="https://www.wkarrow.top/2020/10/03/1.%20%E5%8D%9A%E5%AE%A2%E8%BF%81%E7%A7%BB/index.html">
+<meta property="og:site_name" content="雪漫城的风宅">
+<meta property="og:description" content="从今天开始，我的博客站将全面从 wordpress 转移到 hexo 上，佛系的迁移吧，慢慢来，我倒是不着急。 因为 wordpress 的国内体验实在是越来越差，后台反应慢、更新不可能、功能臃肿我用不到，花里胡哨的固然有好处，可视化编辑器确实很香，但是用了快2年，不想再折腾了，于是就选择 hexo 了 而且最大的优势就是我可以把站点部署在 Coding 平台，然后开启静态页面服务，也就是不用再花">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-10-03T02:51:10.000Z">
+<meta property="article:modified_time" content="2024-02-04T08:57:37.920Z">
+<meta property="article:author" content="NightingaleWK">
+<meta property="article:tag" content="迁移">
+<meta name="twitter:card" content="summary_large_image">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/default.css" media="none" >
+        
+            <link rel="stylesheet" id="hl-dark-theme" href="/css/highlight/dark.css" media="none">
+        
+    
+
+    
+    
+
+    
+    
+<link rel="stylesheet" href="/css/style/dark.css">
+
+    
+<script src="/js/darkmode.js"></script>
+
+
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+    <body>
+        <div id="app" tabindex="-1">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">雪漫城的风宅</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/friends/" class="navbar-menu button">友链</a>
+                
+                    <a href="/about/" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+    <a href="/search/" id="btn-search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="32"><path d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z"></path></svg>
+    </a>
+
+
+        
+        
+    <a href="javaScript:void(0);" id="btn-toggle-dark">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </a>
+
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/friends/" class="dropdown-menu button">友链</a>
+                
+                    <a href="/about/" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        博客迁移
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2020/10/" class="post-meta__date button">2020-10-03</a>
+        
+    <span class="separate-dot"></span><a href="/categories/%E4%B8%AA%E4%BA%BA/" class="button">个人</a>
+
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <p>从今天开始，我的博客站将全面从 wordpress 转移到 hexo 上，佛系的迁移吧，慢慢来，我倒是不着急。</p>
+<p>因为 wordpress 的国内体验实在是越来越差，后台反应慢、更新不可能、功能臃肿我用不到，花里胡哨的固然有好处，可视化编辑器确实很香，但是用了快2年，不想再折腾了，于是就选择 hexo 了</p>
+<p><del>而且最大的优势就是我可以把站点部署在 Coding 平台，然后开启静态页面服务，也就是不用再花钱买服务器了，我只要解析个自己的域名，配置配置就搞定，舒心</del> （ 2020.11.30 Coding 的静态网站服务强制转移到腾讯云并收费了，不讲武德，当前站点现已部署到个人阿里云服务器上 ）</p>
+<p>转来转去，博客吧，我还是想回归写作的本质，排除一切繁杂，保留最原始的初心</p>
+<p>该玩的骚操作都玩过之后，就只剩下回归初心了</p>
+<blockquote>
+<p>回归写作、回归思考、回归独立</p>
+</blockquote>
+<ul>
+<li>2017-08-11，买了人生中第一台云服务器，阿里云的，开始自己部署 wordpress 玩博客，同时，也开启了我的码农生涯。</li>
+<li>2020-10-03，从 Wordpress 迁移到 Hexo，因为 wp 实在是太慢了，真不如静态页面来的速度。</li>
+<li>2021-09-22，5 年的阿里云服务器到期了，转入腾讯云。</li>
+<li>2022-11-24，Hexo 转 typecho。因为作者把版本诈尸般的更新到 1.2.0，想体验。</li>
+<li>2023-11-07，typecho 转 Hexo。因为这么多年了，折腾不动了。整个静态网站部署到 github pages 上养老就行了。</li>
+<li>2024-01-15，Hexo 转微信公众号。</li>
+</ul>
+<p>一开始，按月学生价白嫖服务器，经常升级系统，LNMP 环境换了又换，各种东西装了又装，各种插件试了又试，生命不息，折腾不止。</p>
+<p>再后来，工作后的业余时间与极客热情慢慢减少，博客对我来说逐渐趋向于一个放在手边的“笔记本”，自己的工作经验和常用手册就放在博客里，我需要的慢慢就是一个稳定，可靠的环境，来沉淀我的记忆。所以不再折腾 wp，用上了急速、可靠、便捷的 Hexo，编辑方式也从 wp 的古腾堡，改为了 markdown。</p>
+<p>最后，服务器已经不能只作为自己的兴趣爱好了，工作上的测试项目需要不断变动我的服务器，这种不确定性与博客稳定的环境需求产生了很大的矛盾，于是我索性直接把站点部署到 github pages 服务上，哪怕外网慢一点，不稳定一点，每次部署都要重新配置 dns 信息，那也愿意，至少我的文章，会一直留在 github，一定不会随我而消失。</p>
+<p>现在，为什么我换成公众号了呢？因为我最重要的需求，也就是我的“笔记本”，经常在没有科学上网的情况下，无法访问，这违背了我对博客最基本的要求。既然公众号也是文章的归宿，微信的体量，我相信也不会说倒就倒，那我不如把我的“笔记本”放在这里。</p>
+<p>不追求格式，不需要效果，不在乎外表，只需要一个忠实记录着我人生轨迹的工具。</p>
+<p>至于为什么不用 MSDN、博客园？算了吧，太 low 了，我现在天天问 chatgp、翻官方文档，也不会去看 MSDN 的无营养文章了，浪费生命。</p>
+
+    </div>
+     
+    <div class="post-footer__meta"><p>更新于 2024-02-04</p></div> 
+    <div class="post-entry__tags"><a href="/tags/%E8%BF%81%E7%A7%BB/" class="post-tags__link button"># 迁移</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/2020/11/02/2.%20%E4%BB%8A%E5%A4%A9%E4%B8%AD%E5%8D%88%E5%81%9A%E5%95%A5%E6%A2%A6%E4%BA%86%20001/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            上一篇
+                        </div>
+                        <div class="nav__title">
+                            今天中午做啥梦了 001
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+        </div>
+    </div>
+
+
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="回到顶部" title="回到顶部">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2024 <a href="/">雪漫城的风宅</a>
+        </p>
+    
+    
+        
+            <p><a href="https://beian.miit.gov.cn/" target="_blank">鲁ICP备17046331号-1</a></p>
+
+        
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+        
+    <script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.1.0/dist/lazyload.min.js"></script>
+    <script>
+        window.lazyLoadOptions = {
+            elements_selector: ".lazy",
+            threshold: 0
+        };
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+
+    
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.css">
+
+    
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.js"></script>
+
+    <script>
+        let lazyloadT = Boolean('true'),
+            auto_fancybox = Boolean('false')
+        if (auto_fancybox) {
+            $(".post__content").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        } else {
+            $(".post__content").find("fancybox").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        }
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>

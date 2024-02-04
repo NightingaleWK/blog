@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="https://cdn.blog.wkarrow.top/website/favicon-60x60-circle.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="https://cdn.blog.wkarrow.top/website/favicon-60x60-circle.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="https://cdn.blog.wkarrow.top/website/favicon-60x60-circle.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="https://cdn.blog.wkarrow.top/website/favicon-60x60-circle.png">
+    
+    
+        <link rel="mask-icon" href="https://cdn.blog.wkarrow.top/website/favicon-60x60-circle.png">
+    
+
+
+    <!-- meta -->
+
+
+<title>VS Code 使用公钥配合 Remote SSH 登录远程服务器 | 雪漫城的风宅</title>
+
+
+    <meta name="keywords" content="vs code">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="为了随时随地的使用不同设备链接同一个开发环境，也因为电脑赢弱的性能带不动开发环境，我决定使用远端开发的思路，于是就有了如何免密访问服务器的方案">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VS Code 使用公钥配合 Remote SSH 登录远程服务器">
+<meta property="og:url" content="https://www.wkarrow.top/2022/03/02/38.%20VS%20Code%20%E4%BD%BF%E7%94%A8%E5%85%AC%E9%92%A5%E9%85%8D%E5%90%88%20Remote%20SSH%20%E7%99%BB%E5%BD%95%E8%BF%9C%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8/index.html">
+<meta property="og:site_name" content="雪漫城的风宅">
+<meta property="og:description" content="为了随时随地的使用不同设备链接同一个开发环境，也因为电脑赢弱的性能带不动开发环境，我决定使用远端开发的思路，于是就有了如何免密访问服务器的方案">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-03-02T09:00:00.000Z">
+<meta property="article:modified_time" content="2023-11-07T02:34:49.000Z">
+<meta property="article:author" content="NightingaleWK">
+<meta property="article:tag" content="vs code">
+<meta name="twitter:card" content="summary_large_image">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/default.css" media="none" >
+        
+            <link rel="stylesheet" id="hl-dark-theme" href="/css/highlight/dark.css" media="none">
+        
+    
+
+    
+    
+
+    
+    
+<link rel="stylesheet" href="/css/style/dark.css">
+
+    
+<script src="/js/darkmode.js"></script>
+
+
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+    <body>
+        <div id="app" tabindex="-1">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">雪漫城的风宅</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/friends/" class="navbar-menu button">友链</a>
+                
+                    <a href="/about/" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+    <a href="/search/" id="btn-search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="32"><path d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z"></path></svg>
+    </a>
+
+
+        
+        
+    <a href="javaScript:void(0);" id="btn-toggle-dark">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </a>
+
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/friends/" class="dropdown-menu button">友链</a>
+                
+                    <a href="/about/" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        VS Code 使用公钥配合 Remote SSH 登录远程服务器
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2022/03/" class="post-meta__date button">2022-03-02</a>
+        
+    <span class="separate-dot"></span><a href="/categories/%E5%B7%A5%E5%85%B7/" class="button">工具</a>
+
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <p>为了随时随地的使用不同设备链接同一个开发环境，也因为电脑赢弱的性能带不动开发环境，我决定使用远端开发的思路，于是就有了如何免密访问服务器的方案</p>
+<span id="more"></span>
+
+<h1 id="1-生成公钥私钥"><a href="#1-生成公钥私钥" class="headerlink" title="1.生成公钥私钥"></a>1.生成公钥私钥</h1><p><code>ssh-keygen -t rsa</code> 生成密钥，想安全级别更高 <code>ssh-keygen -b 4096 -t rsa</code></p>
+<p>其中，生成的公钥保存在 <code>.ssh/id_rsa</code> ,私钥在 <code>.ssh/id_rsa.pub</code></p>
+<h1 id="2-上传公钥到远程服务器"><a href="#2-上传公钥到远程服务器" class="headerlink" title="2.上传公钥到远程服务器"></a>2.上传公钥到远程服务器</h1><p>执行 <code>vim /etc/ssh/sshd_config</code> ，确保以下三项是这个样子的，没有的可以自己加进去</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">RSAAuthentication yes</span><br><span class="line">PubkeyAuthentication yes</span><br><span class="line">AuthorizedKeysFile .ssh/authorized_keys</span><br></pre></td></tr></table></figure>
+<p>然后 <code>service sshd restart</code> 重启 ssh 服务</p>
+<p>在本地打开 git bash 输入 <code>ssh-copy-id user@host</code>，该指令将实现公钥上传到远程服务器的 .ssh&#x2F;authorized_keys 的功能</p>
+<p>至此，本地电脑访问远程服务器就不需要密码了</p>
+
+    </div>
+     
+    <div class="post-footer__meta"><p>更新于 2023-11-07</p></div> 
+    <div class="post-entry__tags"><a href="/tags/vs-code/" class="post-tags__link button"># vs code</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/2022/03/22/39.%20PHP%20%E6%97%A0%E6%B3%95%E5%AE%89%E8%A3%85%20fileinfo%20%E7%9A%84%E4%B8%80%E7%A7%8D%E8%A7%A3%E5%86%B3%E6%80%9D%E8%B7%AF/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            上一篇
+                        </div>
+                        <div class="nav__title">
+                            PHP 无法安装 fileinfo 的一种解决思路
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/2022/03/01/37.%20%EF%BC%88%E6%9B%B4%E6%96%B0%E4%B8%AD%EF%BC%89%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E6%90%AD%E5%BB%BA%20Laravel%20Sail%20%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            下一篇
+                        </div>
+                        <div class="nav__title">
+                            （更新中）从零开始搭建 laravel Sail 开发环境
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="回到顶部" title="回到顶部">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2024 <a href="/">雪漫城的风宅</a>
+        </p>
+    
+    
+        
+            <p><a href="https://beian.miit.gov.cn/" target="_blank">鲁ICP备17046331号-1</a></p>
+
+        
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+        
+    <script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.1.0/dist/lazyload.min.js"></script>
+    <script>
+        window.lazyLoadOptions = {
+            elements_selector: ".lazy",
+            threshold: 0
+        };
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+
+    
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.css">
+
+    
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.js"></script>
+
+    <script>
+        let lazyloadT = Boolean('true'),
+            auto_fancybox = Boolean('false')
+        if (auto_fancybox) {
+            $(".post__content").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        } else {
+            $(".post__content").find("fancybox").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        }
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>

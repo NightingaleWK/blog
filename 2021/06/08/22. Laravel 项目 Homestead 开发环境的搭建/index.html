@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="https://cdn.blog.wkarrow.top/website/favicon-60x60-circle.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="https://cdn.blog.wkarrow.top/website/favicon-60x60-circle.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="https://cdn.blog.wkarrow.top/website/favicon-60x60-circle.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="https://cdn.blog.wkarrow.top/website/favicon-60x60-circle.png">
+    
+    
+        <link rel="mask-icon" href="https://cdn.blog.wkarrow.top/website/favicon-60x60-circle.png">
+    
+
+
+    <!-- meta -->
+
+
+<title>laravel 项目 Homestead 开发环境的搭建 | 雪漫城的风宅</title>
+
+
+    <meta name="keywords" content="homestead">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="做好准备12cd ~&#x2F;Homestead &amp;&amp; vagrant upvagrant ssh 在虚拟机中进入 code 文件夹 1cd ~&#x2F;code	  Composer 加速1composer config -g repo.packagist composer https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;composer&#x2F;  创建应用1composer create-pr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="laravel 项目 Homestead 开发环境的搭建">
+<meta property="og:url" content="https://www.wkarrow.top/2021/06/08/22.%20Laravel%20%E9%A1%B9%E7%9B%AE%20Homestead%20%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E7%9A%84%E6%90%AD%E5%BB%BA/index.html">
+<meta property="og:site_name" content="雪漫城的风宅">
+<meta property="og:description" content="做好准备12cd ~&#x2F;Homestead &amp;&amp; vagrant upvagrant ssh 在虚拟机中进入 code 文件夹 1cd ~&#x2F;code	  Composer 加速1composer config -g repo.packagist composer https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;composer&#x2F;  创建应用1composer create-pr">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-06-08T04:00:00.000Z">
+<meta property="article:modified_time" content="2023-11-07T03:12:56.000Z">
+<meta property="article:author" content="NightingaleWK">
+<meta property="article:tag" content="homestead">
+<meta name="twitter:card" content="summary_large_image">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/default.css" media="none" >
+        
+            <link rel="stylesheet" id="hl-dark-theme" href="/css/highlight/dark.css" media="none">
+        
+    
+
+    
+    
+
+    
+    
+<link rel="stylesheet" href="/css/style/dark.css">
+
+    
+<script src="/js/darkmode.js"></script>
+
+
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+    <body>
+        <div id="app" tabindex="-1">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">雪漫城的风宅</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/friends/" class="navbar-menu button">友链</a>
+                
+                    <a href="/about/" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+    <a href="/search/" id="btn-search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="32"><path d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z"></path></svg>
+    </a>
+
+
+        
+        
+    <a href="javaScript:void(0);" id="btn-toggle-dark">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </a>
+
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/friends/" class="dropdown-menu button">友链</a>
+                
+                    <a href="/about/" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        laravel 项目 Homestead 开发环境的搭建
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2021/06/" class="post-meta__date button">2021-06-08</a>
+        
+    <span class="separate-dot"></span><a href="/categories/laravel/" class="button">laravel</a>
+
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <h1 id="做好准备"><a href="#做好准备" class="headerlink" title="做好准备"></a>做好准备</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd ~/Homestead &amp;&amp; vagrant up</span><br><span class="line">vagrant ssh</span><br></pre></td></tr></table></figure>
+<p>在虚拟机中进入 <code>code</code> 文件夹</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd ~/code	</span><br></pre></td></tr></table></figure>
+
+<h1 id="Composer-加速"><a href="#Composer-加速" class="headerlink" title="Composer 加速"></a>Composer 加速</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/</span><br></pre></td></tr></table></figure>
+
+<h1 id="创建应用"><a href="#创建应用" class="headerlink" title="创建应用"></a>创建应用</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer create-project laravel/laravel yourapp</span><br></pre></td></tr></table></figure>
+
+<h1 id="修改-Hosts"><a href="#修改-Hosts" class="headerlink" title="修改 Hosts"></a>修改 Hosts</h1><p>首先找到 <code>Hosts</code> 文件，<code>Windows</code> 下是在</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:/Windows/System32/Drivers/etc/hosts</span><br></pre></td></tr></table></figure>
+<p>文件成功打开后，在 <code>hosts</code> 文件最后面新增下面一行以完成设置</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">192.168.10.10   yourapp.test</span><br></pre></td></tr></table></figure>
+
+<h1 id="新增站点"><a href="#新增站点" class="headerlink" title="新增站点"></a>新增站点</h1><p>进入 homestead 的根目录，找到 <code>Homestead.yaml</code> 并打开</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">ip: &quot;192.168.10.10&quot;</span><br><span class="line">memory: 2048</span><br><span class="line">cpus: 2</span><br><span class="line">provider: virtualbox</span><br><span class="line"></span><br><span class="line">authorize: ~/.ssh/id_rsa.pub</span><br><span class="line"></span><br><span class="line">keys:</span><br><span class="line">    - ~/.ssh/id_rsa</span><br><span class="line"></span><br><span class="line">folders:</span><br><span class="line">    - map: ~/Code</span><br><span class="line">      to: /home/vagrant/Code</span><br><span class="line"></span><br><span class="line">sites:</span><br><span class="line">    - map: homestead.test</span><br><span class="line">      to: /home/vagrant/Code/laravel/public</span><br><span class="line">    - map: yourapp.test #  &lt;--- 这里</span><br><span class="line">      to: /home/vagrant/Code/yourapp/public #  &lt;--- 这里</span><br><span class="line"></span><br><span class="line">databases:</span><br><span class="line">    - homestead</span><br><span class="line">    - yourapp #  &lt;--- 这里</span><br><span class="line"></span><br><span class="line">variables:</span><br><span class="line">    - key: APP_ENV</span><br><span class="line">      value: local</span><br><span class="line"></span><br><span class="line">features:</span><br><span class="line">    - mysql: true</span><br><span class="line"></span><br><span class="line"># blackfire:</span><br><span class="line">#     - id: foo</span><br><span class="line">#       token: bar</span><br><span class="line">#       client-id: foo</span><br><span class="line">#       client-token: bar</span><br><span class="line"></span><br><span class="line"># ports:</span><br><span class="line">#     - send: 93000</span><br><span class="line">#       to: 9300</span><br><span class="line">#     - send: 7777</span><br><span class="line">#       to: 777</span><br><span class="line">#       protocol: udp</span><br></pre></td></tr></table></figure>
+
+<p>这里主要设置了 <code>sites</code> 和 <code>databases</code> 两项。 <code>sites</code> 会将域名 <code>larabbs.test</code> 映射到虚拟机的 <code>/home/vagrant/Code/yourapp/public</code> 文件夹上，而 <code>databases</code> 则为新创建的项目指定数据库名</p>
+<h1 id="重启虚拟机"><a href="#重启虚拟机" class="headerlink" title="重启虚拟机"></a>重启虚拟机</h1><p>对 <code>Homestead.yaml</code> 文件进行了更改之后，需要运行下面命令来使其更改生效</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd ~/Homestead</span><br><span class="line">vagrant provision</span><br><span class="line">vagrant reload</span><br></pre></td></tr></table></figure>
+
+<h1 id="env-修改"><a href="#env-修改" class="headerlink" title=".env 修改"></a>.env 修改</h1><p>我们还需要对应用根目录下的 <code>.env</code> 文件进行设置，为应用指定数据库名称 <code>yourapp</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">APP_NAME=yourapp</span><br><span class="line">APP_ENV=local</span><br><span class="line">APP_KEY=your_app_key</span><br><span class="line">APP_DEBUG=true</span><br><span class="line">APP_URL=http://yourapp.test</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">DB_DATABASE=yourapp</span><br><span class="line">DB_USERNAME=homestead</span><br><span class="line">DB_PASSWORD=secret</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.</span><br></pre></td></tr></table></figure>
+<h1 id="统一代码风格"><a href="#统一代码风格" class="headerlink" title="统一代码风格"></a>统一代码风格</h1><p>对项目的 <code>.editorconfig</code> 进行统一修改。这是为了保证我们的代码风格一致，以避免引起不必要的歧义</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">root = true</span><br><span class="line"></span><br><span class="line">[*]</span><br><span class="line">charset = utf-8</span><br><span class="line">end_of_line = lf</span><br><span class="line">insert_final_newline = true</span><br><span class="line">indent_style = space</span><br><span class="line">indent_size = 4</span><br><span class="line">trim_trailing_whitespace = true</span><br><span class="line"></span><br><span class="line">[*.md]</span><br><span class="line">trim_trailing_whitespace = false</span><br><span class="line"></span><br><span class="line">[*.&#123;yml,yaml&#125;]</span><br><span class="line">indent_size = 2</span><br><span class="line"></span><br><span class="line">[*.&#123;js,html,blade.php,css,scss,vue&#125;]</span><br><span class="line">indent_style = space</span><br><span class="line">indent_size = 2</span><br></pre></td></tr></table></figure>
+
+<h1 id="访问应用"><a href="#访问应用" class="headerlink" title="访问应用"></a>访问应用</h1><p>在 Chrome 浏览器中打开 <code>yourapp.test</code> 即可</p>
+<h1 id="git-版本控制"><a href="#git-版本控制" class="headerlink" title="git 版本控制"></a>git 版本控制</h1><p>线上建立好仓库后，记住 ssh 方式连接的代码仓库名，在虚机的项目根目录下输入如下指令即可</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br><span class="line">git add -A</span><br><span class="line">git commit -m &quot;初始化项目&quot;</span><br><span class="line">git remote add origin git@e.coding.net:nightingalewk/yanji/yanji.git</span><br><span class="line">git push -u origin master</span><br></pre></td></tr></table></figure>
+
+<h1 id="git-分支的使用"><a href="#git-分支的使用" class="headerlink" title="git 分支的使用"></a>git 分支的使用</h1><p>分支使用时，首先执行如下指令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout master</span><br><span class="line">git checkout -b static-pages</span><br></pre></td></tr></table></figure>
+
+<p>当写完一阶段的代码时，需要合并到主分支，需要如下操作</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git add -A</span><br><span class="line">git commit -m &quot;完成静态页面的建立&quot;</span><br><span class="line">git checkout master</span><br><span class="line">git merge static-pages</span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
+<h1 id="启用-Bootstrap"><a href="#启用-Bootstrap" class="headerlink" title="启用 Bootstrap"></a>启用 Bootstrap</h1><p>项目中使用 Bootstrap 前端框架，需要先执行以下命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">composer require laravel/ui --dev</span><br><span class="line">php artisan ui bootstrap</span><br></pre></td></tr></table></figure>
+<p>开始安装之前，我们需要设置安装器来使用国内的淘宝镜像加速，加速镜像的原理是使用国内的 CDN 来下载所需代码包，会更加顺畅</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm config set registry=https://registry.npm.taobao.org</span><br><span class="line">yarn config set registry &#x27;https://registry.npm.taobao.org&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>使用用 Yarn 对扩展包进行安装，请在项目根目录下运行以下命令进行安装</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SASS_BINARY_SITE=http://npm.taobao.org/mirrors/node-sass yarn --no-bin-links</span><br><span class="line">yarn add cross-env --no-bin-links</span><br></pre></td></tr></table></figure>
+
+<h1 id="开发常用指令"><a href="#开发常用指令" class="headerlink" title="开发常用指令"></a>开发常用指令</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//清理各类缓存</span><br><span class="line">php artisan cache:clear &amp;&amp; php artisan config:clear &amp;&amp; php artisan route:clear &amp;&amp; php artisan view:clear</span><br></pre></td></tr></table></figure>
+
+    </div>
+     
+    <div class="post-footer__meta"><p>更新于 2023-11-07</p></div> 
+    <div class="post-entry__tags"><a href="/tags/homestead/" class="post-tags__link button"># homestead</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/2021/06/08/21.%20%E6%88%91%E5%BC%80%E5%8F%91%E7%94%A8%E5%88%B0%E7%9A%84%E5%90%84%E7%A7%8D%E6%8A%80%E6%9C%AF%E5%8F%82%E6%95%B0/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            上一篇
+                        </div>
+                        <div class="nav__title">
+                            我开发用到的各种技术参数
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/2021/06/08/23.%20Laravel%20%E9%A1%B9%E7%9B%AE%E9%83%A8%E7%BD%B2%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E6%B5%81%E7%A8%8B/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            下一篇
+                        </div>
+                        <div class="nav__title">
+                            laravel 项目部署到服务器的流程
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="回到顶部" title="回到顶部">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2024 <a href="/">雪漫城的风宅</a>
+        </p>
+    
+    
+        
+            <p><a href="https://beian.miit.gov.cn/" target="_blank">鲁ICP备17046331号-1</a></p>
+
+        
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+        
+    <script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.1.0/dist/lazyload.min.js"></script>
+    <script>
+        window.lazyLoadOptions = {
+            elements_selector: ".lazy",
+            threshold: 0
+        };
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+
+    
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.css">
+
+    
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.js"></script>
+
+    <script>
+        let lazyloadT = Boolean('true'),
+            auto_fancybox = Boolean('false')
+        if (auto_fancybox) {
+            $(".post__content").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        } else {
+            $(".post__content").find("fancybox").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        }
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>

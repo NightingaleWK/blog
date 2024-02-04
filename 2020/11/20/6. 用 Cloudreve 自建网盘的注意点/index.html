@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="https://cdn.blog.wkarrow.top/website/favicon-60x60-circle.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="https://cdn.blog.wkarrow.top/website/favicon-60x60-circle.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="https://cdn.blog.wkarrow.top/website/favicon-60x60-circle.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="https://cdn.blog.wkarrow.top/website/favicon-60x60-circle.png">
+    
+    
+        <link rel="mask-icon" href="https://cdn.blog.wkarrow.top/website/favicon-60x60-circle.png">
+    
+
+
+    <!-- meta -->
+
+
+<title>用 Cloudreve 自建网盘的注意点 | 雪漫城的风宅</title>
+
+
+    <meta name="keywords" content="Cloudreve">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="自建一个不限速、无限容量、无客户端、流程可控的在线云盘很有必要，有时候自己跨设备传个东西，和朋友分享几个小文件，自建盘高速且方便 我是用的是 Cloudreve 框架，配合七牛云存储来实现的 其中有几个注意点需要说一下 1. 反向代理白屏原本 Cloudreve （以下称 CR）自己的使用逻辑是访问服务器 IP 和端口来访问可视化管理面板，但是我想使用 oneinstack 创建一个虚拟主机来，并">
+<meta property="og:type" content="article">
+<meta property="og:title" content="用 Cloudreve 自建网盘的注意点">
+<meta property="og:url" content="https://www.wkarrow.top/2020/11/20/6.%20%E7%94%A8%20Cloudreve%20%E8%87%AA%E5%BB%BA%E7%BD%91%E7%9B%98%E7%9A%84%E6%B3%A8%E6%84%8F%E7%82%B9/index.html">
+<meta property="og:site_name" content="雪漫城的风宅">
+<meta property="og:description" content="自建一个不限速、无限容量、无客户端、流程可控的在线云盘很有必要，有时候自己跨设备传个东西，和朋友分享几个小文件，自建盘高速且方便 我是用的是 Cloudreve 框架，配合七牛云存储来实现的 其中有几个注意点需要说一下 1. 反向代理白屏原本 Cloudreve （以下称 CR）自己的使用逻辑是访问服务器 IP 和端口来访问可视化管理面板，但是我想使用 oneinstack 创建一个虚拟主机来，并">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-11-20T15:07:00.000Z">
+<meta property="article:modified_time" content="2023-11-07T02:05:43.000Z">
+<meta property="article:author" content="NightingaleWK">
+<meta property="article:tag" content="Cloudreve">
+<meta name="twitter:card" content="summary_large_image">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/default.css" media="none" >
+        
+            <link rel="stylesheet" id="hl-dark-theme" href="/css/highlight/dark.css" media="none">
+        
+    
+
+    
+    
+
+    
+    
+<link rel="stylesheet" href="/css/style/dark.css">
+
+    
+<script src="/js/darkmode.js"></script>
+
+
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+    <body>
+        <div id="app" tabindex="-1">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">雪漫城的风宅</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/friends/" class="navbar-menu button">友链</a>
+                
+                    <a href="/about/" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+    <a href="/search/" id="btn-search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="32"><path d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z"></path></svg>
+    </a>
+
+
+        
+        
+    <a href="javaScript:void(0);" id="btn-toggle-dark">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </a>
+
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/friends/" class="dropdown-menu button">友链</a>
+                
+                    <a href="/about/" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        用 Cloudreve 自建网盘的注意点
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2020/11/" class="post-meta__date button">2020-11-20</a>
+        
+    <span class="separate-dot"></span><a href="/categories/%E5%B7%A5%E5%85%B7/" class="button">工具</a>
+
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <p>自建一个不限速、无限容量、无客户端、流程可控的在线云盘很有必要，有时候自己跨设备传个东西，和朋友分享几个小文件，自建盘高速且方便</p>
+<p>我是用的是 Cloudreve 框架，配合七牛云存储来实现的</p>
+<p>其中有几个注意点需要说一下</p>
+<h2 id="1-反向代理白屏"><a href="#1-反向代理白屏" class="headerlink" title="1. 反向代理白屏"></a>1. 反向代理白屏</h2><p>原本 Cloudreve （以下称 CR）自己的使用逻辑是访问服务器 IP 和端口来访问可视化管理面板，但是我想使用 oneinstack 创建一个虚拟主机来，并分配一个二级域名访问我的 CR ，于是这就需要修改一下站点的 nginx 配置文件 </p>
+<p>官方文档写的很明白，加上给的一段话即可</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">location / &#123;</span><br><span class="line">    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">    proxy_set_header Host $http_host;</span><br><span class="line">    proxy_redirect off;</span><br><span class="line">    proxy_pass http://127.0.0.1:5212;</span><br><span class="line"></span><br><span class="line">    # 如果您要使用本地存储策略，请将下一行注释符删除，并更改大小为理论最大文件尺寸</span><br><span class="line">    # client_max_body_size 20000m;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>而 oneinstack 自己默认创建的配置文件中含有大量已生成的 location 配置，不删除这些默认的信息会与我们后加的内容冲突导致访问网址白屏，我们只需删除那些自带的 location 配置即可</p>
+<h2 id="2-反向代理访问缓慢"><a href="#2-反向代理访问缓慢" class="headerlink" title="2. 反向代理访问缓慢"></a>2. 反向代理访问缓慢</h2><p>上方代码中有一段是 <code>proxy_pass http://127.0.0.1:5212</code> ，我自己下意识的将 <code>127.0.0.1</code> 改为了 <code>47.100.100.100</code> 即我的服务器公网 IP（安全起见，这个 IP 是我编的 😋） ，此修改是没必要的，这样会徒增访问时间，保持原样即可，务必注意</p>
+<h2 id="3-Oneinstack-中-Nginx-默认的-conf-位置"><a href="#3-Oneinstack-中-Nginx-默认的-conf-位置" class="headerlink" title="3. Oneinstack 中 Nginx 默认的 conf 位置"></a>3. Oneinstack 中 Nginx 默认的 conf 位置</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/nginx/conf/vhost</span><br></pre></td></tr></table></figure>
+
+<p>最后，按照官网的指南手册和网友的攻略可轻松快速的搭建一个属于自己的网盘，故不再重复叙述</p>
+
+    </div>
+     
+    <div class="post-footer__meta"><p>更新于 2023-11-07</p></div> 
+    <div class="post-entry__tags"><a href="/tags/Cloudreve/" class="post-tags__link button"># Cloudreve</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/2020/11/23/8.%20%E2%80%9C%20%E5%86%8D%E7%BB%99%E6%88%91%E5%8D%81%E7%A7%92%E5%90%A7%EF%BC%8C%E6%89%98%E5%85%8B%20%E2%80%9D/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            上一篇
+                        </div>
+                        <div class="nav__title">
+                            “ 再给我十秒吧，托克 ”
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/2020/11/20/5.%20%E8%A7%A3%E5%86%B3%20%E2%80%9CWordPress%20%E9%9C%80%E8%A6%81%E8%AE%BF%E9%97%AE%E6%82%A8%E7%BD%91%E9%A1%B5%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E6%9D%83%E9%99%90%E2%80%9D%20%E9%97%AE%E9%A2%98/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            下一篇
+                        </div>
+                        <div class="nav__title">
+                            解决 “WordPress 需要访问您网页服务器的权限” 问题
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="回到顶部" title="回到顶部">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2024 <a href="/">雪漫城的风宅</a>
+        </p>
+    
+    
+        
+            <p><a href="https://beian.miit.gov.cn/" target="_blank">鲁ICP备17046331号-1</a></p>
+
+        
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+        
+    <script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.1.0/dist/lazyload.min.js"></script>
+    <script>
+        window.lazyLoadOptions = {
+            elements_selector: ".lazy",
+            threshold: 0
+        };
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+
+    
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.css">
+
+    
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.js"></script>
+
+    <script>
+        let lazyloadT = Boolean('true'),
+            auto_fancybox = Boolean('false')
+        if (auto_fancybox) {
+            $(".post__content").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        } else {
+            $(".post__content").find("fancybox").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        }
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>

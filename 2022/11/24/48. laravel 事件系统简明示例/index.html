@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="https://cdn.blog.wkarrow.top/website/favicon-60x60-circle.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="https://cdn.blog.wkarrow.top/website/favicon-60x60-circle.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="https://cdn.blog.wkarrow.top/website/favicon-60x60-circle.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="https://cdn.blog.wkarrow.top/website/favicon-60x60-circle.png">
+    
+    
+        <link rel="mask-icon" href="https://cdn.blog.wkarrow.top/website/favicon-60x60-circle.png">
+    
+
+
+    <!-- meta -->
+
+
+<title>laravel 事件系统简明示例 | 雪漫城的风宅</title>
+
+
+    <meta name="keywords" content="事件">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="简单对 laravel 事件系统做一些说明">
+<meta property="og:type" content="article">
+<meta property="og:title" content="laravel 事件系统简明示例">
+<meta property="og:url" content="https://www.wkarrow.top/2022/11/24/48.%20laravel%20%E4%BA%8B%E4%BB%B6%E7%B3%BB%E7%BB%9F%E7%AE%80%E6%98%8E%E7%A4%BA%E4%BE%8B/index.html">
+<meta property="og:site_name" content="雪漫城的风宅">
+<meta property="og:description" content="简单对 laravel 事件系统做一些说明">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-11-24T08:17:00.000Z">
+<meta property="article:modified_time" content="2023-11-07T03:12:56.000Z">
+<meta property="article:author" content="NightingaleWK">
+<meta property="article:tag" content="事件">
+<meta name="twitter:card" content="summary_large_image">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/default.css" media="none" >
+        
+            <link rel="stylesheet" id="hl-dark-theme" href="/css/highlight/dark.css" media="none">
+        
+    
+
+    
+    
+
+    
+    
+<link rel="stylesheet" href="/css/style/dark.css">
+
+    
+<script src="/js/darkmode.js"></script>
+
+
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+    <body>
+        <div id="app" tabindex="-1">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">雪漫城的风宅</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/friends/" class="navbar-menu button">友链</a>
+                
+                    <a href="/about/" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+    <a href="/search/" id="btn-search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="32"><path d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z"></path></svg>
+    </a>
+
+
+        
+        
+    <a href="javaScript:void(0);" id="btn-toggle-dark">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </a>
+
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/friends/" class="dropdown-menu button">友链</a>
+                
+                    <a href="/about/" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        laravel 事件系统简明示例
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2022/11/" class="post-meta__date button">2022-11-24</a>
+        
+    <span class="separate-dot"></span><a href="/categories/laravel/" class="button">laravel</a>
+
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <p>简单对 laravel 事件系统做一些说明</p>
+<span id="more"></span>
+<p>laravel 的事件提供了一个简单的观察者实现，能够订阅和监听应用中发生的各种事件。事件类保存在 app&#x2F;Events 目录中，而这些事件的的监听器则被保存在 app&#x2F;Listeners 目录下。这些目录只有当你使用 Artisan 命令来生成事件和监听器时才会被自动创建。</p>
+<p>事件机制是一种很好的应用解耦方式，因为一个事件可以拥有多个互不依赖的监听器。例如，如果你希望每次订单发货时向用户发送一个 Slack 通知。你可以简单地发起一个 OrderShipped 事件，让监听器接收之后转化成一个 Slack 通知，这样你就可以不用把订单的业务代码跟 Slack 通知的代码耦合在一起了。</p>
+<h2 id="生成一个事件类"><a href="#生成一个事件类" class="headerlink" title="生成一个事件类"></a>生成一个事件类</h2><p>比如通过 artisan 命令生成一个 UserLogin 事件：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php artisan make:event UserLogin</span><br></pre></td></tr></table></figure>
+<p>在 app&#x2F;Events 中就会自动生成一个 UserLogin.php 文件，内容不多，如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">namespace App\Events;</span><br><span class="line"></span><br><span class="line">use Illuminate\Broadcasting\Channel;</span><br><span class="line">use Illuminate\Queue\SerializesModels;</span><br><span class="line">use Illuminate\Broadcasting\PrivateChannel;</span><br><span class="line">use Illuminate\Broadcasting\PresenceChannel;</span><br><span class="line">use Illuminate\Broadcasting\InteractsWithSockets;</span><br><span class="line">use Illuminate\Contracts\Broadcasting\ShouldBroadcast;</span><br><span class="line"></span><br><span class="line">class UserLogin</span><br><span class="line">&#123;</span><br><span class="line">    use InteractsWithSockets, SerializesModels;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Create a new event instance.</span><br><span class="line">     *</span><br><span class="line">     * @return void</span><br><span class="line">     */</span><br><span class="line">    public function __construct()</span><br><span class="line">    &#123;</span><br><span class="line">        //</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Get the channels the event should broadcast on.</span><br><span class="line">     *</span><br><span class="line">     * @return Channel|array</span><br><span class="line">     */</span><br><span class="line">    public function broadcastOn()</span><br><span class="line">    &#123;</span><br><span class="line">        return new PrivateChannel(&#x27;channel-name&#x27;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="定义监听器"><a href="#定义监听器" class="headerlink" title="定义监听器"></a>定义监听器</h2><p>一个事件可以被一个或多个监听器监听，也就是观察者模式，我们可以定义多个监听器，当这个事件发生，执行一系列逻辑。</p>
+<p>在 EventServiceProvider 的 $listen 中可以定义事件和监听器，如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">protected $listen = [</span><br><span class="line">    &#x27;App\Events\UserLogin&#x27; =&gt; [</span><br><span class="line">        &#x27;App\Lisenter\DoSomething1&#x27;,</span><br><span class="line">        &#x27;App\Lisenter\Dosomething2&#x27;,</span><br><span class="line">    ],</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+<p>然后执行 artisan 命令，就可以自动在 app&#x2F;Lisenter 目录生成监听器。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php artisan event::generate</span><br></pre></td></tr></table></figure>
+<p>可以看到 app&#x2F;Lisenter 目录多了 DoSomething1.php 和 DoSomething2.php 两个文件，我们看看其中一个内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">namespace App\Lisenter;</span><br><span class="line"></span><br><span class="line">use App\Events\UserLogin;</span><br><span class="line">use Illuminate\Queue\InteractsWithQueue;</span><br><span class="line">use Illuminate\Contracts\Queue\ShouldQueue;</span><br><span class="line"></span><br><span class="line">class DoSomething1</span><br><span class="line">&#123;</span><br><span class="line">    /**</span><br><span class="line">     * Create the event listener.</span><br><span class="line">     *</span><br><span class="line">     * @return void</span><br><span class="line">     */</span><br><span class="line">    public function __construct()</span><br><span class="line">    &#123;</span><br><span class="line">        //</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Handle the event.</span><br><span class="line">     *</span><br><span class="line">     * @param  UserLogin  $event</span><br><span class="line">     * @return void</span><br><span class="line">     */</span><br><span class="line">    public function handle(UserLogin $event)</span><br><span class="line">    &#123;</span><br><span class="line">        info(&#x27;do something1&#x27;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在两个监听器的 handle 方法中我们打印一个日志来测试一下，如代码 handle 方法所示。</p>
+<h2 id="分发和触发事件"><a href="#分发和触发事件" class="headerlink" title="分发和触发事件"></a>分发和触发事件</h2><p>我们在某个控制器的方法中来分发事件，也就是触发事件，看监听器是否正常工作。</p>
+<p>就是一句话：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">event(new UserLogin());</span><br></pre></td></tr></table></figure>
+<p>然后我们请求这个控制器，观察日志，发现打印了日志：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[2018-06-17 10:04:29] local.INFO: do something1</span><br><span class="line">[2018-06-17 10:04:29] local.INFO: do something2</span><br></pre></td></tr></table></figure>
+<p>那么这个事件 - 监听机制就正常工作了。</p>
+<h1 id="队列异步处理"><a href="#队列异步处理" class="headerlink" title="队列异步处理"></a>队列异步处理</h1><p>如果某个监听器需要执行的操作比较慢，可以放到消息队列进行异步处理。</p>
+<p>比如把上面的 DoSomething1 改成需要放入队列的，只需要 implements ShoulQueue 接口。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">class DoSomething1 implements ShouldQueue</span><br></pre></td></tr></table></figure>
+<p>也可以指定队列驱动，如下代码。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 任务应该发送到的队列的连接的名称</span><br><span class="line"> *</span><br><span class="line"> * @var string|null</span><br><span class="line"> */</span><br><span class="line">public $connection = &#x27;redis&#x27;;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 任务应该发送到的队列的名称</span><br><span class="line"> *</span><br><span class="line"> * @var string|null</span><br><span class="line"> */</span><br><span class="line">public $queue = &#x27;listeners&#x27;;</span><br></pre></td></tr></table></figure>
+<p>我们再次执行控制器方法。</p>
+<p>日志里没有打印 do something1，只有 do something2，但是在 redis 队列里发现了一个名为 queues:default 的列表。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;job&quot;:&quot;Illuminate\\Events\\CallQueuedHandler@call&quot;,&quot;data&quot;:&#123;&quot;class&quot;:&quot;App\\Listener\\DoSomething1&quot;,&quot;method&quot;:&quot;handle&quot;,&quot;data&quot;:&quot;a:1:&#123;i:0;O:20:\&quot;App\\Events\\UserLogin\&quot;:1:&#123;s:6:\&quot;socket\&quot;;N;&#125;&#125;&quot;&#125;,&quot;id&quot;:&quot;3D7VDUwueYGtUvsazicWsifwWQxnnLID&quot;,&quot;attempts&quot;:1&#125;</span><br></pre></td></tr></table></figure>
+<p>这个时候需要使用 php artisan queue:work 执行队列任务，才是真正执行 DoSomething1 这个监听器的 handle 方法。</p>
+
+    </div>
+     
+    <div class="post-footer__meta"><p>更新于 2023-11-07</p></div> 
+    <div class="post-entry__tags"><a href="/tags/%E4%BA%8B%E4%BB%B6/" class="post-tags__link button"># 事件</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/2022/11/24/49.%20laravel%20blade%20%E7%AE%80%E6%98%8E%E7%A4%BA%E4%BE%8B/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            上一篇
+                        </div>
+                        <div class="nav__title">
+                            laravel blade 简明示例
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/2022/11/24/46.%20%E6%A3%80%E6%B5%8B%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%8F%A3%E7%9A%84%E6%96%B9%E6%B3%95/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            下一篇
+                        </div>
+                        <div class="nav__title">
+                            检测服务端口的方法
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="回到顶部" title="回到顶部">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2024 <a href="/">雪漫城的风宅</a>
+        </p>
+    
+    
+        
+            <p><a href="https://beian.miit.gov.cn/" target="_blank">鲁ICP备17046331号-1</a></p>
+
+        
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+        
+    <script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.1.0/dist/lazyload.min.js"></script>
+    <script>
+        window.lazyLoadOptions = {
+            elements_selector: ".lazy",
+            threshold: 0
+        };
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+
+    
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.css">
+
+    
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.js"></script>
+
+    <script>
+        let lazyloadT = Boolean('true'),
+            auto_fancybox = Boolean('false')
+        if (auto_fancybox) {
+            $(".post__content").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        } else {
+            $(".post__content").find("fancybox").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        }
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>

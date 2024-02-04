@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="https://cdn.blog.wkarrow.top/website/favicon-60x60-circle.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="https://cdn.blog.wkarrow.top/website/favicon-60x60-circle.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="https://cdn.blog.wkarrow.top/website/favicon-60x60-circle.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="https://cdn.blog.wkarrow.top/website/favicon-60x60-circle.png">
+    
+    
+        <link rel="mask-icon" href="https://cdn.blog.wkarrow.top/website/favicon-60x60-circle.png">
+    
+
+
+    <!-- meta -->
+
+
+<title>laravel 项目部署到服务器的流程 | 雪漫城的风宅</title>
+
+
+    <meta name="keywords" content="代码部署, oneinstack, lnmp">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="新建虚拟站点进入到 oneinstack 根目录，输入 .&#x2F;vhost 新建虚拟主机，在开始之前首先申请好指向本测试服务器的域名，ssl 证书可使用 oneinstack 自动生成并自动续期，一路完成后会有如下提示即可 &#x2F;&#x2F; #######################################################################&#x2F;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="laravel 项目部署到服务器的流程">
+<meta property="og:url" content="https://www.wkarrow.top/2021/06/08/23.%20Laravel%20%E9%A1%B9%E7%9B%AE%E9%83%A8%E7%BD%B2%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E6%B5%81%E7%A8%8B/index.html">
+<meta property="og:site_name" content="雪漫城的风宅">
+<meta property="og:description" content="新建虚拟站点进入到 oneinstack 根目录，输入 .&#x2F;vhost 新建虚拟主机，在开始之前首先申请好指向本测试服务器的域名，ssl 证书可使用 oneinstack 自动生成并自动续期，一路完成后会有如下提示即可 &#x2F;&#x2F; #######################################################################&#x2F;">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-06-08T04:00:00.000Z">
+<meta property="article:modified_time" content="2023-11-07T03:12:56.000Z">
+<meta property="article:author" content="NightingaleWK">
+<meta property="article:tag" content="代码部署">
+<meta property="article:tag" content="oneinstack">
+<meta property="article:tag" content="lnmp">
+<meta name="twitter:card" content="summary_large_image">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/default.css" media="none" >
+        
+            <link rel="stylesheet" id="hl-dark-theme" href="/css/highlight/dark.css" media="none">
+        
+    
+
+    
+    
+
+    
+    
+<link rel="stylesheet" href="/css/style/dark.css">
+
+    
+<script src="/js/darkmode.js"></script>
+
+
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+    <body>
+        <div id="app" tabindex="-1">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">雪漫城的风宅</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/friends/" class="navbar-menu button">友链</a>
+                
+                    <a href="/about/" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+    <a href="/search/" id="btn-search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="32"><path d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z"></path></svg>
+    </a>
+
+
+        
+        
+    <a href="javaScript:void(0);" id="btn-toggle-dark">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </a>
+
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/friends/" class="dropdown-menu button">友链</a>
+                
+                    <a href="/about/" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        laravel 项目部署到服务器的流程
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2021/06/" class="post-meta__date button">2021-06-08</a>
+        
+    <span class="separate-dot"></span><a href="/categories/laravel/" class="button">laravel</a>
+
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <h1 id="新建虚拟站点"><a href="#新建虚拟站点" class="headerlink" title="新建虚拟站点"></a>新建虚拟站点</h1><p>进入到 oneinstack 根目录，输入 <code>./vhost</code> 新建虚拟主机，在开始之前首先申请好指向本测试服务器的域名，ssl 证书可使用 oneinstack 自动生成并自动续期，一路完成后会有如下提示即可</p>
+<p>&#x2F;&#x2F; #######################################################################<br>&#x2F;&#x2F; #       OneinStack for CentOS&#x2F;RedHat 6+ Debian 8+ and Ubuntu 14+      #<br>&#x2F;&#x2F; #       For more information please visit <a target="_blank" rel="noopener" href="https://oneinstack.com/">https://oneinstack.com</a>      #<br>&#x2F;&#x2F; #######################################################################<br>&#x2F;&#x2F; Your domain:                  yanji.wkarrow.top<br>&#x2F;&#x2F; Virtualhost conf:             &#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#x2F;vhost&#x2F;yanji.wkarrow.top.conf<br>&#x2F;&#x2F; Directory of:                 &#x2F;data&#x2F;wwwroot&#x2F;yanji.wkarrow.top<br>&#x2F;&#x2F; Rewrite rule:                 &#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#x2F;rewrite&#x2F;laravel.conf<br>&#x2F;&#x2F; Let’s Encrypt SSL Certificate:&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#x2F;ssl&#x2F;yanji.wkarrow.top.crt<br>&#x2F;&#x2F; SSL Private Key:              &#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#x2F;ssl&#x2F;yanji.wkarrow.top.key</p>
+<h1 id="git-clone-拷贝线上仓库数据到本地"><a href="#git-clone-拷贝线上仓库数据到本地" class="headerlink" title="git clone 拷贝线上仓库数据到本地"></a>git clone 拷贝线上仓库数据到本地</h1><p>cd 到 <code>/date/wwwroot/yanji.wkarrow.top</code> 目录中，执行<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">composer update</span><br><span class="line">php artisan key:generate</span><br></pre></td></tr></table></figure></p>
+<h1 id="修改-env-文件"><a href="#修改-env-文件" class="headerlink" title="修改 .env 文件"></a>修改 .env 文件</h1><p>在项目根目录下执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp .env.example .env</span><br></pre></td></tr></table></figure>
+<p>之后 <code>vim .env</code> 配置站点数据</p>
+<h1 id="修改站点权限"><a href="#修改站点权限" class="headerlink" title="修改站点权限"></a>修改站点权限</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">chmod -R 777 yanji.wkarrow.top</span><br><span class="line">chown -R www-data:www-data yanji.wkarrow.top</span><br><span class="line"></span><br><span class="line">cd yanji,wkarrow.top</span><br><span class="line">chgrp -R www storage bootstrap/cache</span><br><span class="line">chmod -R ug+rwx storage bootstrap/cache</span><br></pre></td></tr></table></figure>
+
+<h1 id="修改-nginx-配置"><a href="#修改-nginx-配置" class="headerlink" title="修改 nginx 配置"></a>修改 nginx 配置</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local/nginx/conf/vhost</span><br><span class="line">vim yanji.wkarrow.top.conf</span><br><span class="line">service nginx restart</span><br></pre></td></tr></table></figure>
+
+<h1 id="创建数据库"><a href="#创建数据库" class="headerlink" title="创建数据库"></a>创建数据库</h1><p>前往 oneinstack 自带的 phpMyAdmin 新建一个名为“岩脊”数据库</p>
+<h1 id="数据库迁移"><a href="#数据库迁移" class="headerlink" title="数据库迁移"></a>数据库迁移</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php artisan migrate</span><br></pre></td></tr></table></figure>
+    </div>
+     
+    <div class="post-footer__meta"><p>更新于 2023-11-07</p></div> 
+    <div class="post-entry__tags"><a href="/tags/%E4%BB%A3%E7%A0%81%E9%83%A8%E7%BD%B2/" class="post-tags__link button"># 代码部署</a><a href="/tags/oneinstack/" class="post-tags__link button"># oneinstack</a><a href="/tags/lnmp/" class="post-tags__link button"># lnmp</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/2021/06/08/22.%20Laravel%20%E9%A1%B9%E7%9B%AE%20Homestead%20%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E7%9A%84%E6%90%AD%E5%BB%BA/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            上一篇
+                        </div>
+                        <div class="nav__title">
+                            laravel 项目 Homestead 开发环境的搭建
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/2021/06/08/24.%20Laravel%20%E9%A1%B9%E7%9B%AE%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E7%9A%84%E6%9B%B4%E6%96%B0/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            下一篇
+                        </div>
+                        <div class="nav__title">
+                            laravel 项目在服务器上的更新
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="回到顶部" title="回到顶部">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2024 <a href="/">雪漫城的风宅</a>
+        </p>
+    
+    
+        
+            <p><a href="https://beian.miit.gov.cn/" target="_blank">鲁ICP备17046331号-1</a></p>
+
+        
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+        
+    <script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.1.0/dist/lazyload.min.js"></script>
+    <script>
+        window.lazyLoadOptions = {
+            elements_selector: ".lazy",
+            threshold: 0
+        };
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+
+    
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.css">
+
+    
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.js"></script>
+
+    <script>
+        let lazyloadT = Boolean('true'),
+            auto_fancybox = Boolean('false')
+        if (auto_fancybox) {
+            $(".post__content").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        } else {
+            $(".post__content").find("fancybox").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        }
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>
