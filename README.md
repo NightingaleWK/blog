@@ -6,4 +6,4 @@
 
 瞅啥呢，看见上方的 ``Discussions`` 按钮了没？
 
-**点它！**
+**点它**，或者，**[点我](https://github.com/NightingaleWK/blog/discussions)**
