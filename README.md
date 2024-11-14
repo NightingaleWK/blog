@@ -1,4 +1,4 @@
-# blog-in-github
+# github-blog
 这是一个基于 github 讨论区的博客设计思路
 
 ... ...
